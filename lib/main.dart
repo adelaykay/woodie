@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:woodie/firebase_options.dart';
 import 'package:woodie/pages/home.dart';
+import 'package:woodie/pages/media_details.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,7 +39,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => MyHomePage(),
+        '/media_details': (context) => MediaDetailsPage(),
+      },
+      debugShowCheckedModeBanner: false,
     );
   }
 }

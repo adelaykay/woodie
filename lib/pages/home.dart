@@ -14,9 +14,15 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final textController = TextEditingController();
-  late String image_url;
+  Map<String, String> imageUrl = {};
 
   bool isLoading = true;
+
+  final GlobalKey<RefreshIndicatorState> _freeRefreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>();
+
+  late String? posterPath = '';
+  late String? backdropPath = '';
 
   // List<Media> movies = Media();
 
@@ -28,65 +34,83 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<void> getPath() async {
-    image_url = await Config.getImagePath();
+    imageUrl = await Config.getImagePath();
+    posterPath = imageUrl['posterPath']!;
+    backdropPath = imageUrl['backdropPath']!;
     setState(() {
       isLoading = false;
     });
   }
 
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _key,
       appBar: AppBar(
-        title: Image.asset(
-          'assets/logo.png',
-          height: 50,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Image.asset(
+              'assets/logo.png',
+              height: 50,
+            ),
+            AnimSearchBar(
+              color: Colors.black54,
+              searchIconColor: Colors.white,
+              rtl: true,
+              width: 200,
+              textController: textController,
+              onSuffixTap: () {
+                setState(() {
+                  textController.clear();
+                });
+              },
+              onSubmitted: (String word) {
+                // QuerySearch(word);
+              },
+            ),
+          ],
         ),
         automaticallyImplyLeading: false,
-        actions: [
-          AnimSearchBar(
-            color: Colors.black54,
-            searchIconColor: Colors.white,
-            rtl: true,
-            width: 200,
-            textController: textController,
-            onSuffixTap: () {
-              setState(() {
-                textController.clear();
-              });
-            },
-            onSubmitted: (String word) {
-              // QuerySearch(word);
-            },
-          ),
-        ],
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text('Trending', style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),),
-          isLoading
-              ? CircularProgressIndicator(
-                  color: Colors.cyan,
-                )
-              : SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      ...List.generate(demoMovies.length, (index) {
-                        return Container(
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30)),
-                            child: MediaCard(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: RefreshIndicator(
+          key: _freeRefreshIndicatorKey,
+          onRefresh: () async {
+            return getPath();
+          },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Trending',
+                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+              ),
+              isLoading
+                  ? CircularProgressIndicator(
+                      color: Colors.cyan,
+                    )
+                  : SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          ...List.generate(demoMovies.length, (index) {
+                            return MediaCard(
                               movie: demoMovies[index],
-                              image_url: image_url,
-                            ));
-                      }),
-                      SizedBox(width: 10),
-                    ],
-                  ),
-                )
-        ],
+                              posterPath: posterPath,
+                              backdropPath: backdropPath
+                            );
+                          }),
+                          SizedBox(width: 10),
+                        ],
+                      ),
+                    )
+            ],
+          ),
+        ),
       ),
       // bottomNavigationBar: MyBottomNav(),
     );
