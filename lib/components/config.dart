@@ -13,7 +13,7 @@ class Config {
     Map data = jsonDecode(response.body);
     String base = data['images']['base_url'];
     String posterSize = data['images']['poster_sizes'][2];
-    String backdropSize = data['images']['poster_sizes'][3];
+    String backdropSize = data['images']['poster_sizes'][4];
     print('$base$posterSize');
     String posterPath = '$base$posterSize';
     String backdropPath = '$base$backdropSize';

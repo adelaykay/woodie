@@ -1,8 +1,10 @@
 import 'package:anim_search_bar/anim_search_bar.dart';
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:woodie/components/config.dart';
 import 'package:woodie/components/media_card.dart';
 
+import '../components/bottom_nav.dart';
 import '../model/media.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -37,6 +39,7 @@ class _MyHomePageState extends State<MyHomePage> {
     imageUrl = await Config.getImagePath();
     posterPath = imageUrl['posterPath']!;
     backdropPath = imageUrl['backdropPath']!;
+
     setState(() {
       isLoading = false;
     });
@@ -46,19 +49,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    // print(MediaQuery.of(context).size.width);
     return Scaffold(
       key: _key,
+      backgroundColor: Colors.black45,
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        leading: Image.asset(
+          'assets/cyan_logo.png',
+        ),
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Image.asset(
-              'assets/logo.png',
-              height: 50,
-            ),
             AnimSearchBar(
               color: Colors.black54,
-              searchIconColor: Colors.white,
+              searchIconColor: Colors.cyan,
               rtl: true,
               width: 200,
               textController: textController,
@@ -74,6 +79,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
         automaticallyImplyLeading: false,
+        toolbarHeight: 75,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -86,33 +92,68 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Trending',
-                style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
+                'Trending Movies',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              isLoading
-                  ? CircularProgressIndicator(
-                      color: Colors.cyan,
-                    )
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        children: [
-                          ...List.generate(demoMovies.length, (index) {
-                            return MediaCard(
-                              movie: demoMovies[index],
-                              posterPath: posterPath,
-                              backdropPath: backdropPath
-                            );
-                          }),
-                          SizedBox(width: 10),
-                        ],
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.cyan,
+                        ),
+                      )
+                    : CarouselSlider(
+                        items: [
+                            ...List.generate(
+                                demoMovies.length,
+                                (index) => MediaCard(
+                                    movie: demoMovies[index],
+                                    posterPath: posterPath,
+                                    backdropPath: backdropPath))
+                          ],
+                        options: CarouselOptions(
+                          viewportFraction: 0.5,
+                            aspectRatio: 1.3,
+                            enlargeCenterPage: true,
+                            enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                            enlargeFactor: 0.7,
+                          padEnds: true,
+                        )
+                ),
+              ),
+              Text(
+                'TV Shows',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.cyan,
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: [
+                            ...List.generate(demoTV.length, (index) {
+                              return MediaCard(
+                                  movie: demoTV[index],
+                                  posterPath: posterPath,
+                                  backdropPath: backdropPath);
+                            }),
+                            SizedBox(width: 10),
+                          ],
+                        ),
                       ),
-                    )
+              )
             ],
           ),
         ),
       ),
-      // bottomNavigationBar: MyBottomNav(),
+      bottomNavigationBar: MyBottomNav(),
     );
   }
 }

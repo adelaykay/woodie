@@ -30,11 +30,11 @@ class _MediaCardState extends State<MediaCard> {
         onTap: () =>
             Navigator.of(context).pushNamed('/media_details', arguments: {
               'title': widget.movie.title,
-              'year': '${widget.movie.title}(${widget.movie.year})',
+              'year': widget.movie.year,
               'overview': widget.movie.overview,
               'rating': widget.movie.rating,
-              'backdrop':
-                  '${widget.backdropPath}${widget.movie.poster}',
+              'backdrop': (MediaQuery.of(context).size.width < 500) ?
+                  '${widget.backdropPath}${widget.movie.poster}' : '${widget.backdropPath}${widget.movie.backdrop}',
             }),
         child: Card(
           color: Colors.transparent,
@@ -56,13 +56,15 @@ class _MediaCardState extends State<MediaCard> {
                   ),
                 ),
               ),
-              Text(
-                '${widget.movie.title}(${widget.movie.year})',
-                overflow: TextOverflow.fade,
-                style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: -0.5),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  '${widget.movie.title}(${widget.movie.year})',
+                  overflow: TextOverflow.fade,
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold
+                  ),
+                ),
               )
             ],
           ),
