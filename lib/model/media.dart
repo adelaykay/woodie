@@ -1,7 +1,7 @@
 class Media {
   final int id;
   final double rating;
-  final String? title, overview, language, poster, backdrop, year;
+  final String? title, name, overview, language, poster, backdrop, year;
 
   Media(
       {required this.id,
@@ -11,7 +11,33 @@ class Media {
       required this.language,
       required this.poster,
       required this.backdrop,
-      required this.year});
+      required this.year, this.name});
+
+  factory Media.fromJson(dynamic json) {
+    return Media(
+        id: json['id'] as int,
+        rating: json['vote_average'] == null
+            ? 0.0
+            : json['vote_average'].toDouble(),
+        title: checkTitle(json),
+        // name: json['name'] != null ? json['name'].toString() : '',
+        overview: json['overview'] == null ? '' : json['overview'].toString(),
+        language: json['original_language'] == null ? '' : json['original_language'].toString(),
+        poster: json['poster_path'] == null ? '' : json['poster_path'].toString(),
+        backdrop: json['backdrop_path'] == null ? '' : json['backdrop_path'].toString(),
+        year: '');
+  }
+  static String? checkTitle(Map a){
+    if(a['title']!= null) return a['title'].toString();
+    else if(a['name']!= null) return a['name'].toString();
+    else return '';
+  }
+
+  static List<Media> mediaFromSnapshot(List snapshot) {
+    return snapshot.map((data) {
+      return Media.fromJson(data);
+    }).toList();
+  }
 }
 
 // demo movies
@@ -71,7 +97,7 @@ List<Media> demoMovies = [
 List<Media> demoTV = [
   Media(
       id: 217216,
-      rating: 10,
+      rating: 10.0,
       title: "Flor Sem Tempo",
       overview: "",
       language: "pt",

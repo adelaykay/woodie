@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import '../model/media.dart';
@@ -33,8 +34,9 @@ class _MediaCardState extends State<MediaCard> {
               'year': widget.movie.year,
               'overview': widget.movie.overview,
               'rating': widget.movie.rating,
-              'backdrop': (MediaQuery.of(context).size.width < 500) ?
-                  '${widget.backdropPath}${widget.movie.poster}' : '${widget.backdropPath}${widget.movie.backdrop}',
+              'backdrop': (MediaQuery.of(context).size.width < 500)
+                  ? '${widget.backdropPath}${widget.movie.poster}'
+                  : '${widget.backdropPath}${widget.movie.backdrop}',
             }),
         child: Card(
           color: Colors.transparent,
@@ -42,28 +44,55 @@ class _MediaCardState extends State<MediaCard> {
           surfaceTintColor: Colors.transparent,
           child: Column(
             children: [
-              Hero(
-                tag: 'poster1',
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(30),
-                  child: FadeInImage.memoryNetwork(
-                    fit: BoxFit.fitHeight,
-                    image:
-                        '${widget.posterPath}${widget.movie.poster}',
-                    placeholder: kTransparentImage,
-                    imageErrorBuilder: (context, error, stackTrace) =>
-                        Image.network("https://loremflickr.com/g/240/360/book"),
+              Expanded(
+                flex: 7,
+                child: Hero(
+                  tag: 'poster1',
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(30),
+                    child: FadeInImage.memoryNetwork(
+                      fit: BoxFit.fitHeight,
+                      image: '${widget.posterPath}${widget.movie.poster}',
+                      placeholder: kTransparentImage,
+                      imageErrorBuilder: (context, error, stackTrace) =>
+                          Image.network(
+                              "https://loremflickr.com/g/240/360/book"),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    '${widget.movie.title}',
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  '${widget.movie.title}(${widget.movie.year})',
-                  overflow: TextOverflow.fade,
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold
-                  ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                RatingBarIndicator(
+                  rating: widget.movie.rating! / 2.0,
+                    itemCount: 5,
+                    itemSize: 10,
+                    itemBuilder: (context, index) => Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        )),
+                Text('${widget.movie.year}'),
+                  ],
                 ),
               )
             ],

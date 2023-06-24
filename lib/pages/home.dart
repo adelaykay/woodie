@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:woodie/components/config.dart';
 import 'package:woodie/components/media_card.dart';
+import 'package:woodie/model/media_api.dart';
 
 import '../components/bottom_nav.dart';
 import '../model/media.dart';
@@ -19,37 +20,44 @@ class _MyHomePageState extends State<MyHomePage> {
   Map<String, String> imageUrl = {};
 
   bool isLoading = true;
+  late List<Media> _movies;
+  late List<Media> _tv;
 
   final GlobalKey<RefreshIndicatorState> _freeRefreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
-
   late String? posterPath = '';
   late String? backdropPath = '';
-
-  // List<Media> movies = Media();
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    getPath();
+    getData();
   }
 
-  Future<void> getPath() async {
-    imageUrl = await Config.getImagePath();
-    posterPath = imageUrl['posterPath']!;
-    backdropPath = imageUrl['backdropPath']!;
-
-    setState(() {
-      isLoading = false;
-    });
+  Future<void> getData() async {
+    Future.wait([
+      Config.getImagePath(MediaQueryData().size.width),
+      MediaApi.getMedia('movie'),
+      MediaApi.getMedia('tv'),
+    ]).then((List response) {
+      imageUrl = response[0];
+      _movies = response[1];
+      _tv = response[2];
+      posterPath = imageUrl['posterPath']!;
+      backdropPath = imageUrl['backdropPath']!;
+      setState(() {
+        isLoading = false;
+      });
+    }).catchError((e) => print(e));
+    // imageUrl = await Config.getImagePath();
   }
 
   final GlobalKey<ScaffoldState> _key = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
-    // print(MediaQuery.of(context).size.width);
+    // print(MediaQuery.of(context).orientation);
     return Scaffold(
       key: _key,
       backgroundColor: Colors.black45,
@@ -81,79 +89,123 @@ class _MyHomePageState extends State<MyHomePage> {
         automaticallyImplyLeading: false,
         toolbarHeight: 75,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: RefreshIndicator(
-          key: _freeRefreshIndicatorKey,
-          onRefresh: () async {
-            return getPath();
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Trending Movies',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.cyan,
-                        ),
-                      )
-                    : CarouselSlider(
-                        items: [
-                            ...List.generate(
-                                demoMovies.length,
-                                (index) => MediaCard(
-                                    movie: demoMovies[index],
-                                    posterPath: posterPath,
-                                    backdropPath: backdropPath))
-                          ],
-                        options: CarouselOptions(
-                          viewportFraction: 0.5,
-                            aspectRatio: 1.3,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: RefreshIndicator(
+            key: _freeRefreshIndicatorKey,
+            onRefresh: () async {
+              return getData();
+            },
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Coming Soon',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.cyan,
+                          ),
+                        )
+                      : CarouselSlider(
+                          items: [
+                              ...List.generate(
+                                  demoMovies.length,
+                                  (index) => MediaCard(
+                                      movie: demoMovies[index],
+                                      posterPath: posterPath,
+                                      backdropPath: backdropPath))
+                            ],
+                          options: CarouselOptions(
+                            initialPage: 3,
+                            viewportFraction: 0.5,
+                            aspectRatio: 1.2,
                             enlargeCenterPage: true,
                             enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                             enlargeFactor: 0.7,
-                          padEnds: true,
-                        )
+                            padEnds: true,
+                          )),
                 ),
-              ),
-              Text(
-                'TV Shows',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.cyan,
+                Text(
+                  'Trending Movies',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.cyan,
+                          ),
+                        )
+                      : Container(
+                          // height: MediaQuery.of(context).size.height * 2 / 7,
+                          //     width: MediaQuery.of(context).size.width,
+                          child: CarouselSlider(
+                              items: [
+                                ...List.generate(
+                                    _movies.length,
+                                    (index) => MediaCard(
+                                        movie: _movies[index],
+                                        posterPath: posterPath,
+                                        backdropPath: backdropPath))
+                              ],
+                              options: CarouselOptions(
+                                initialPage: 1,
+                                enableInfiniteScroll: false,
+                                viewportFraction: 0.3,
+                                aspectRatio: 2,
+                                pageSnapping: false,
+                              )),
                         ),
-                      )
-                    : SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            ...List.generate(demoTV.length, (index) {
-                              return MediaCard(
-                                  movie: demoTV[index],
-                                  posterPath: posterPath,
-                                  backdropPath: backdropPath);
-                            }),
-                            SizedBox(width: 10),
-                          ],
+                ),
+                Text(
+                  'TV Shows',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: isLoading
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.cyan,
+                          ),
+                        )
+                      : SizedBox(
+                          height: MediaQuery.of(context).size.height * 2 / 7,
+                          width: MediaQuery.of(context).size.width,
+                          child: CarouselSlider(
+                              items: [
+                                ...List.generate(
+                                    _tv.length,
+                                    (index) => MediaCard(
+                                        movie: _tv[index],
+                                        posterPath: posterPath,
+                                        backdropPath: backdropPath))
+                              ],
+                              options: CarouselOptions(
+                                  initialPage: 1,
+                                  enableInfiniteScroll: false,
+                                  viewportFraction: 0.3,
+                                  aspectRatio: 2,
+                                  pageSnapping: false)),
                         ),
-                      ),
-              )
-            ],
+                ),
+                SizedBox(
+                  height: 60,
+                )
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: MyBottomNav(),
+      extendBody: true,
     );
   }
 }
