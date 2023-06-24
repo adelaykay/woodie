@@ -11,7 +11,8 @@ class Media {
       required this.language,
       required this.poster,
       required this.backdrop,
-      required this.year, this.name});
+      required this.year,
+      this.name});
 
   factory Media.fromJson(dynamic json) {
     return Media(
@@ -19,18 +20,38 @@ class Media {
         rating: json['vote_average'] == null
             ? 0.0
             : json['vote_average'].toDouble(),
-        title: checkTitle(json),
+        title: getTitle(json),
         // name: json['name'] != null ? json['name'].toString() : '',
         overview: json['overview'] == null ? '' : json['overview'].toString(),
-        language: json['original_language'] == null ? '' : json['original_language'].toString(),
-        poster: json['poster_path'] == null ? '' : json['poster_path'].toString(),
-        backdrop: json['backdrop_path'] == null ? '' : json['backdrop_path'].toString(),
-        year: '');
+        language: json['original_language'] == null
+            ? ''
+            : json['original_language'].toString(),
+        poster:
+            json['poster_path'] == null ? '' : json['poster_path'].toString(),
+        backdrop: json['backdrop_path'] == null
+            ? ''
+            : json['backdrop_path'].toString(),
+        year: getYear(json));
   }
-  static String? checkTitle(Map a){
-    if(a['title']!= null) return a['title'].toString();
-    else if(a['name']!= null) return a['name'].toString();
-    else return '';
+
+  static String? getTitle(Map a) {
+    if (a['title'] != null) {
+      return a['title'].toString();
+    } else if (a['name'] != null) {
+      return a['name'].toString();
+    } else {
+      return '';
+    }
+  }
+
+  static String? getYear(Map a){
+    if(a['release_date'] != null){
+      return a['release_date'].toString().substring(0,4);
+    } else if(a['first_air_date'] != null){
+      return a['first_air_date'].toString().substring(0,4);
+    } else {
+      return '';
+    }
   }
 
   static List<Media> mediaFromSnapshot(List snapshot) {

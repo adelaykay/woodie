@@ -22,6 +22,7 @@ class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = true;
   late List<Media> _movies;
   late List<Media> _tv;
+  late List<Media> _upcoming;
 
   final GlobalKey<RefreshIndicatorState> _freeRefreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -38,12 +39,16 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<void> getData() async {
     Future.wait([
       Config.getImagePath(MediaQueryData().size.width),
-      MediaApi.getMedia('movie'),
-      MediaApi.getMedia('tv'),
+      MediaApi.getMedia(path: '3/movie/upcoming'),
+      MediaApi.getMedia(path: '/3/discover/movie'),
+      MediaApi.getMedia(
+        path: '3/tv/top_rated',
+      ),
     ]).then((List response) {
       imageUrl = response[0];
-      _movies = response[1];
-      _tv = response[2];
+      _upcoming = response[1];
+      _movies = response[2];
+      _tv = response[3];
       posterPath = imageUrl['posterPath']!;
       backdropPath = imageUrl['backdropPath']!;
       setState(() {
@@ -80,8 +85,21 @@ class _MyHomePageState extends State<MyHomePage> {
                   textController.clear();
                 });
               },
-              onSubmitted: (String word) {
-                // QuerySearch(word);
+              onSubmitted: (String word) async {
+                showDialog(
+                    context: context,
+                    builder: (context) => Center(
+                          child: CircularProgressIndicator(),
+                        ));
+                List<Media> searchResponse;
+                searchResponse = await MediaApi.getMedia(
+                    path: '3/search/multi', query: word);
+                Navigator.of(context)
+                    .popAndPushNamed('/search_results', arguments: {
+                  'results': searchResponse,
+                  'poster_path': posterPath,
+                  'backdrop_path': backdropPath
+                });
               },
             ),
           ],
@@ -115,9 +133,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       : CarouselSlider(
                           items: [
                               ...List.generate(
-                                  demoMovies.length,
+                                  _upcoming.length,
                                   (index) => MediaCard(
-                                      movie: demoMovies[index],
+                                      movie: _upcoming[index],
                                       posterPath: posterPath,
                                       backdropPath: backdropPath))
                             ],
@@ -168,34 +186,31 @@ class _MyHomePageState extends State<MyHomePage> {
                   'TV Shows',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                  child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.cyan,
-                          ),
-                        )
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height * 2 / 7,
-                          width: MediaQuery.of(context).size.width,
-                          child: CarouselSlider(
-                              items: [
-                                ...List.generate(
-                                    _tv.length,
-                                    (index) => MediaCard(
-                                        movie: _tv[index],
-                                        posterPath: posterPath,
-                                        backdropPath: backdropPath))
-                              ],
-                              options: CarouselOptions(
-                                  initialPage: 1,
-                                  enableInfiniteScroll: false,
-                                  viewportFraction: 0.3,
-                                  aspectRatio: 2,
-                                  pageSnapping: false)),
+                isLoading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.cyan,
                         ),
-                ),
+                      )
+                    : SizedBox(
+                        height: MediaQuery.of(context).size.height * 2 / 7,
+                        width: MediaQuery.of(context).size.width,
+                        child: CarouselSlider(
+                            items: [
+                              ...List.generate(
+                                  _tv.length,
+                                  (index) => MediaCard(
+                                      movie: _tv[index],
+                                      posterPath: posterPath,
+                                      backdropPath: backdropPath))
+                            ],
+                            options: CarouselOptions(
+                                initialPage: 1,
+                                enableInfiniteScroll: false,
+                                viewportFraction: 0.3,
+                                aspectRatio: 2,
+                                pageSnapping: false)),
+                      ),
                 SizedBox(
                   height: 60,
                 )

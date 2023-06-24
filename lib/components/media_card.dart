@@ -77,7 +77,7 @@ class _MediaCardState extends State<MediaCard> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   mainAxisSize: MainAxisSize.max,
@@ -91,7 +91,7 @@ class _MediaCardState extends State<MediaCard> {
                           Icons.star,
                           color: Colors.amber,
                         )),
-                Text('${widget.movie.year}'),
+                Text('${widget.movie.year}', style: TextStyle(fontSize: 12),),
                   ],
                 ),
               )

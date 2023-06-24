@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:woodie/firebase_options.dart';
 import 'package:woodie/pages/home.dart';
 import 'package:woodie/pages/media_details.dart';
+import 'package:woodie/pages/search_results.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => MyHomePage(),
         '/media_details': (context) => MediaDetailsPage(),
+        '/search_results': (context) => SearchResults(),
       },
       debugShowCheckedModeBanner: false,
     );
