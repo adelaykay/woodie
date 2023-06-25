@@ -39,6 +39,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
 
   late String posterPath = '';
   late String backdropPath = '';
+  late String profilePath = '';
 
   //https://api.themoviedb.org/3/movie/157336
   // ?api_key=9d9bc48b3fbe46983542e1f3e3c878e5
@@ -59,6 +60,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
       movieDetails = response[1];
       posterPath = imageUrl['posterPath']!;
       backdropPath = imageUrl['backdropPath']!;
+      profilePath = imageUrl['profilePath']!;
       setState(() {
         isLoading = false;
       });
@@ -203,6 +205,25 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [],
                         ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        CarouselSlider(
+                            items: [
+                              ...List.generate(
+                                  movieDetails.cast!.length,
+                                      (index) => CircleAvatar(radius: 30,
+                                        foregroundImage: NetworkImage('$profilePath${movieDetails.cast?[index].profile_pic}'),
+                                      ))
+                            ],
+                            options: CarouselOptions(
+                              initialPage: 0,
+                              viewportFraction: 0.2,
+                              enableInfiniteScroll: false,
+                              pageSnapping: false,
+                              aspectRatio: 6,
+                              padEnds: false,
+                            )),
                         SizedBox(
                           height: 10,
                         ),

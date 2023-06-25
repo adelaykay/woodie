@@ -15,9 +15,11 @@ class Config {
     String base = data['images']['base_url'];
     String posterSize = data['images']['poster_sizes'][3];
     String backdropSize = data['images']['poster_sizes'][4];
+    String profileSize = data['images']['profile_sizes'][1];
     print('$base$posterSize');
     String posterPath = '$base$posterSize';
     String backdropPath = '$base$backdropSize';
-    return {'backdropPath': backdropPath, 'posterPath': posterPath};
+    String profilePath = '$base$profileSize';
+    return {'backdropPath': backdropPath, 'posterPath': posterPath, 'profilePath': profilePath};
   }
 }

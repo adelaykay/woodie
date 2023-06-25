@@ -146,12 +146,12 @@ class _MyHomePageState extends State<MyHomePage> {
                                       backdropPath: backdropPath))
                             ],
                           options: CarouselOptions(
-                            initialPage: 3,
+                            initialPage: 0,
                             viewportFraction: 0.5,
-                            aspectRatio: 1.2,
+                            aspectRatio: 1.1,
                             enlargeCenterPage: true,
                             enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                            enlargeFactor: 0.7,
+                            enlargeFactor: 0.5,
                             padEnds: true,
                           )),
                 ),
@@ -179,10 +179,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                         backdropPath: backdropPath))
                               ],
                               options: CarouselOptions(
-                                  initialPage: 1,
+                                  initialPage: 0,
                                   enableInfiniteScroll: false,
                                   viewportFraction: 0.3,
-                                  aspectRatio: 2,
+                                  aspectRatio: 1.9,
                                   pageSnapping: false,
                                   padEnds: false)),
                         ),
@@ -209,10 +209,10 @@ class _MyHomePageState extends State<MyHomePage> {
                                       backdropPath: backdropPath))
                             ],
                             options: CarouselOptions(
-                                initialPage: 1,
+                                initialPage: 0,
                                 enableInfiniteScroll: false,
                                 viewportFraction: 0.3,
-                                aspectRatio: 2,
+                                aspectRatio: 1.9,
                                 pageSnapping: false,
                                 padEnds: false)),
                       ),
