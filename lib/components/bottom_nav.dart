@@ -18,7 +18,7 @@ class _MyBottomNavState extends State<MyBottomNav> {
 
 
   void _onItemTapped(int index) {
-    if(index != widget.idx) Navigator.pushNamed(context, _pageOptions[index]);
+    if(index != widget.idx) Navigator.pushReplacementNamed(context, _pageOptions[index]);
   }
 
   @override

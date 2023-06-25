@@ -55,10 +55,10 @@ class MovieDetails {
             : json['original_language'].toString(),
         year: getYear(json),
         id: json['id'] == null ? 0 : json['id'] as int,
-        genre: getGenre(json['genres']),
-        cast: getCast(json['credits']['cast']),
+        genre: json['genres'] == null ? [] : getGenre(json['genres']),
+        cast: json['credits'] == null ? [] : getCast(json['credits']['cast']),
         runtime: json['runtime'],
-        similar: json['similar']['results'] == null
+        similar: json['similar'] == null
             ? []
             : getSimilar(json['similar']['results']));
   }

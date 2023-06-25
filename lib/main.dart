@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:woodie/firebase_options.dart';
 import 'package:woodie/model/screen_arguments.dart';
 import 'package:woodie/pages/favorites.dart';
+import 'package:woodie/pages/forgot_password/forgot_password_screen.dart';
 import 'package:woodie/pages/home.dart';
 import 'package:woodie/pages/media_details_page.dart';
 import 'package:woodie/pages/search_results_page.dart';
+import 'package:woodie/pages/sign_in/sign_in_screen.dart';
+import 'package:woodie/pages/sign_up/sign_up_screen.dart';
 import 'package:woodie/pages/videos_page.dart';
 
 void main() async {
@@ -36,7 +39,7 @@ class MyApp extends StatelessWidget {
         // text styling for headlines, titles, bodies of text, and more.
         textTheme: const TextTheme(
           displayLarge: TextStyle(fontSize: 72, fontWeight: FontWeight.bold),
-          titleLarge: TextStyle(fontSize: 36, fontStyle: FontStyle.italic),
+          titleLarge: TextStyle(fontSize: 28, fontStyle: FontStyle.italic),
           bodyMedium: TextStyle(fontSize: 14, fontFamily: 'Candara'),
         ),
       ),
@@ -47,7 +50,10 @@ class MyApp extends StatelessWidget {
         // MediaDetailsPage.routeName: (context) => const MediaDetailsPage(),
         SearchResultsPage.routeName: (context) => SearchResultsPage(),
         VideosPage.routeName: (context) => VideosPage(),
-        MyFavoritesPage.routeName: (context) => MyFavoritesPage()
+        MyFavoritesPage.routeName: (context) => MyFavoritesPage(),
+        SignInScreen.routeName: (context) => SignInScreen(),
+        SignUpScreen.routeName: (context) => SignUpScreen(),
+        ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen()
       },
       // Provide a function to handle named routes.
       // Use this function to identify the named
