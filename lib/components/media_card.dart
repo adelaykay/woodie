@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:transparent_image/transparent_image.dart';
+import 'package:woodie/model/screen_arguments.dart';
 
 import '../model/media.dart';
-import '../pages/media_details.dart';
-import 'config.dart';
+import '../pages/media_details_page.dart';
 
 class MediaCard extends StatefulWidget {
   final double height;
@@ -14,7 +14,7 @@ class MediaCard extends StatefulWidget {
 
   const MediaCard(
       {Key? key,
-      this.height = 200,
+      this.height = 300,
       required this.movie,
       required this.posterPath,
       required this.backdropPath})
@@ -29,15 +29,16 @@ class _MediaCardState extends State<MediaCard> {
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () =>
-            Navigator.of(context).pushNamed('/media_details', arguments: {
-              'title': widget.movie.title,
-              'year': widget.movie.year,
-              'overview': widget.movie.overview,
-              'rating': widget.movie.rating,
-              'backdrop': (MediaQuery.of(context).size.width < 500)
+            Navigator.pushNamed(context, MediaDetailsPage.routeName, arguments: ScreenArguments(
+              id: widget.movie.id,
+              title: widget.movie.title,
+              year: widget.movie.year,
+              overview: widget.movie.overview,
+              rating: widget.movie.rating,
+              backdrop: (MediaQuery.of(context).size.width < 500)
                   ? '${widget.backdropPath}${widget.movie.poster}'
                   : '${widget.backdropPath}${widget.movie.backdrop}',
-            }),
+            )),
         child: Card(
           color: Colors.transparent,
           shadowColor: Colors.transparent,
@@ -56,7 +57,8 @@ class _MediaCardState extends State<MediaCard> {
                       placeholder: kTransparentImage,
                       imageErrorBuilder: (context, error, stackTrace) =>
                           Image.network(
-                              "https://loremflickr.com/g/240/360/book"),
+                        "https://loremflickr.com/g/240/360/book",
+                      ),
                     ),
                   ),
                 ),
@@ -76,23 +78,30 @@ class _MediaCardState extends State<MediaCard> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                RatingBarIndicator(
-                  rating: widget.movie.rating! / 2.0,
-                    itemCount: 5,
-                    itemSize: 10,
-                    itemBuilder: (context, index) => Icon(
-                          Icons.star,
-                          color: Colors.amber,
-                        )),
-                Text('${widget.movie.year}', style: TextStyle(fontSize: 12),),
-                  ],
+              Expanded(
+                flex: 1,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      RatingBarIndicator(
+                          rating: widget.movie.rating! / 2.0,
+                          itemCount: 5,
+                          itemSize: 10,
+                          itemBuilder: (context, index) => Icon(
+                                Icons.star,
+                                color: Colors.amber,
+                            size: 5,
+                              )),
+                      Text(
+                        '${widget.movie.year}',
+                        style: TextStyle(fontSize: 12),
+                      ),
+                    ],
+                  ),
                 ),
               )
             ],

@@ -14,7 +14,7 @@ class MediaApi {
         host: 'api.themoviedb.org',
         path: path,
         queryParameters: {
-          'include_adult': 'true',
+          'include_adult': 'false',
           'include_video': 'true',
           'language': 'en-US',
           'page': '1',
@@ -31,7 +31,9 @@ class MediaApi {
     List _temp = [];
 
     for (var i in data['results']) {
-      _temp.add(i);
+      if (i['media_type'] != 'person') {
+        _temp.add(i);
+      }
     }
     print(_temp[0]);
 

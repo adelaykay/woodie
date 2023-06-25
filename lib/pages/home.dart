@@ -9,6 +9,7 @@ import '../components/bottom_nav.dart';
 import '../model/media.dart';
 
 class MyHomePage extends StatefulWidget {
+  static const routeName = '/';
   const MyHomePage({Key? key}) : super(key: key);
 
   @override
@@ -26,8 +27,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final GlobalKey<RefreshIndicatorState> _freeRefreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
-  late String? posterPath = '';
-  late String? backdropPath = '';
+  late String posterPath = '';
+  late String backdropPath = '';
 
   @override
   void initState() {
@@ -58,13 +59,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // imageUrl = await Config.getImagePath();
   }
 
-  final GlobalKey<ScaffoldState> _key = GlobalKey();
-
   @override
   Widget build(BuildContext context) {
     // print(MediaQuery.of(context).orientation);
     return Scaffold(
-      key: _key,
       backgroundColor: Colors.black45,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -108,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
         toolbarHeight: 75,
       ),
       body: SingleChildScrollView(
+        physics: AlwaysScrollableScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: RefreshIndicator(
@@ -118,16 +117,23 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Coming Soon',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+                isLoading
+                    ? Text('')
+                    : Text(
+                        'Coming Soon',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.cyan,
+                      ? Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height * 4 / 11),
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.cyan,
+                            ),
                           ),
                         )
                       : CarouselSlider(
@@ -149,21 +155,20 @@ class _MyHomePageState extends State<MyHomePage> {
                             padEnds: true,
                           )),
                 ),
-                Text(
-                  'Trending Movies',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
+                isLoading
+                    ? Text('')
+                    : Text(
+                        'Trending Movies',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
                   child: isLoading
-                      ? Center(
-                          child: CircularProgressIndicator(
-                            color: Colors.cyan,
-                          ),
-                        )
+                      ? Text('')
                       : Container(
-                          // height: MediaQuery.of(context).size.height * 2 / 7,
-                          //     width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height * 2 / 7,
+                          width: MediaQuery.of(context).size.width,
                           child: CarouselSlider(
                               items: [
                                 ...List.generate(
@@ -174,24 +179,23 @@ class _MyHomePageState extends State<MyHomePage> {
                                         backdropPath: backdropPath))
                               ],
                               options: CarouselOptions(
-                                initialPage: 1,
-                                enableInfiniteScroll: false,
-                                viewportFraction: 0.3,
-                                aspectRatio: 2,
-                                pageSnapping: false,
-                              )),
+                                  initialPage: 1,
+                                  enableInfiniteScroll: false,
+                                  viewportFraction: 0.3,
+                                  aspectRatio: 2,
+                                  pageSnapping: false,
+                                  padEnds: false)),
                         ),
-                ),
-                Text(
-                  'TV Shows',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 isLoading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.cyan,
-                        ),
-                      )
+                    ? Text('')
+                    : Text(
+                        'TV Shows',
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                isLoading
+                    ? Text('')
                     : SizedBox(
                         height: MediaQuery.of(context).size.height * 2 / 7,
                         width: MediaQuery.of(context).size.width,
@@ -209,7 +213,8 @@ class _MyHomePageState extends State<MyHomePage> {
                                 enableInfiniteScroll: false,
                                 viewportFraction: 0.3,
                                 aspectRatio: 2,
-                                pageSnapping: false)),
+                                pageSnapping: false,
+                                padEnds: false)),
                       ),
                 SizedBox(
                   height: 60,
@@ -218,6 +223,14 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Show refresh indicator programmatically on button tap.
+          _freeRefreshIndicatorKey.currentState?.show();
+        },
+        icon: const Icon(Icons.refresh),
+        label: const Text('Show Indicator'),
       ),
       bottomNavigationBar: MyBottomNav(),
       extendBody: true,

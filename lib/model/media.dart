@@ -1,6 +1,6 @@
 class Media {
   final int id;
-  final double rating;
+  final double? rating;
   final String? title, name, overview, language, poster, backdrop, year;
 
   Media(
@@ -19,9 +19,8 @@ class Media {
         id: json['id'] as int,
         rating: json['vote_average'] == null
             ? 0.0
-            : json['vote_average'].toDouble(),
+            : double.parse(json['vote_average'].toDouble().toStringAsFixed(1)),
         title: getTitle(json),
-        // name: json['name'] != null ? json['name'].toString() : '',
         overview: json['overview'] == null ? '' : json['overview'].toString(),
         language: json['original_language'] == null
             ? ''
@@ -46,9 +45,9 @@ class Media {
 
   static String? getYear(Map a){
     if(a['release_date'] != null){
-      return a['release_date'].toString().substring(0,4);
+      if(a['release_date'].isNotEmpty) return a['release_date'].toString().substring(0,4);
     } else if(a['first_air_date'] != null){
-      return a['first_air_date'].toString().substring(0,4);
+      if(a['first_air_date'].isNotEmpty) return a['first_air_date'].toString().substring(0,4);
     } else {
       return '';
     }
