@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:woodie/secret.dart';
 
-import 'media.dart';
+import '../model/media.dart';
 
 class MediaApi {
   static Future<List<Media>> getMedia(

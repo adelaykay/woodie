@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:woodie/model/movie_details.dart';
-import 'package:woodie/model/movie_details_api.dart';
+import 'package:woodie/services/movie_details_api.dart';
 import 'package:woodie/components/config.dart';
 
 import '../components/media_card.dart';

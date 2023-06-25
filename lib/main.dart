@@ -2,9 +2,11 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:woodie/firebase_options.dart';
 import 'package:woodie/model/screen_arguments.dart';
+import 'package:woodie/pages/favorites.dart';
 import 'package:woodie/pages/home.dart';
 import 'package:woodie/pages/media_details_page.dart';
 import 'package:woodie/pages/search_results_page.dart';
+import 'package:woodie/pages/videos_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,16 +41,13 @@ class MyApp extends StatelessWidget {
         ),
       ),
       initialRoute: '/',
-      // routes: {
-      //   '/': (context) => MyHomePage(),
-      //   '/media_details': (context) => MediaDetailsPage(),
-      //   '/search_results': (context) => SearchResultsPage(),
-      // },
       routes: {
         MyHomePage.routeName: (context) =>
         const MyHomePage(),
         // MediaDetailsPage.routeName: (context) => const MediaDetailsPage(),
-        SearchResultsPage.routeName: (context) => SearchResultsPage()
+        SearchResultsPage.routeName: (context) => SearchResultsPage(),
+        VideosPage.routeName: (context) => VideosPage(),
+        MyFavoritesPage.routeName: (context) => MyFavoritesPage()
       },
       // Provide a function to handle named routes.
       // Use this function to identify the named

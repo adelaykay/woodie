@@ -3,7 +3,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:woodie/components/config.dart';
 import 'package:woodie/components/media_card.dart';
-import 'package:woodie/model/media_api.dart';
+import 'package:woodie/services/media_api.dart';
 
 import '../components/bottom_nav.dart';
 import '../model/media.dart';
@@ -105,15 +105,15 @@ class _MyHomePageState extends State<MyHomePage> {
         automaticallyImplyLeading: false,
         toolbarHeight: 75,
       ),
-      body: SingleChildScrollView(
-        physics: AlwaysScrollableScrollPhysics(),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: RefreshIndicator(
-            key: _freeRefreshIndicatorKey,
-            onRefresh: () async {
-              return getData();
-            },
+      body: RefreshIndicator(
+        key: _freeRefreshIndicatorKey,
+        onRefresh: () async {
+          return getData();
+        },
+        child: SingleChildScrollView(
+          physics: AlwaysScrollableScrollPhysics(),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -224,15 +224,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Show refresh indicator programmatically on button tap.
-          _freeRefreshIndicatorKey.currentState?.show();
-        },
-        icon: const Icon(Icons.refresh),
-        label: const Text('Show Indicator'),
-      ),
-      bottomNavigationBar: MyBottomNav(),
+
+      bottomNavigationBar: MyBottomNav(idx: 0,),
       extendBody: true,
     );
   }
