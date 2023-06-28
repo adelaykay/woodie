@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:woodie/pages/home.dart';
+import 'package:Woodie/pages/home.dart';
 
 import '../../../components/form_error.dart';
 import '../../../constants.dart';

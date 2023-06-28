@@ -1,15 +1,17 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:woodie/firebase_options.dart';
-import 'package:woodie/model/screen_arguments.dart';
-import 'package:woodie/pages/favorites.dart';
-import 'package:woodie/pages/forgot_password/forgot_password_screen.dart';
-import 'package:woodie/pages/home.dart';
-import 'package:woodie/pages/media_details_page.dart';
-import 'package:woodie/pages/search_results_page.dart';
-import 'package:woodie/pages/sign_in/sign_in_screen.dart';
-import 'package:woodie/pages/sign_up/sign_up_screen.dart';
-import 'package:woodie/pages/videos_page.dart';
+import 'package:Woodie/firebase_options.dart';
+import 'package:Woodie/model/screen_arguments.dart';
+import 'package:Woodie/pages/favorites/favorites.dart';
+import 'package:Woodie/pages/forgot_password/forgot_password_screen.dart';
+import 'package:Woodie/pages/home.dart';
+import 'package:Woodie/pages/media_details_page.dart';
+import 'package:Woodie/pages/search_results_page.dart';
+import 'package:Woodie/pages/sign_in/sign_in_screen.dart';
+import 'package:Woodie/pages/sign_up/sign_up_screen.dart';
+import 'package:Woodie/pages/videos/videos_page.dart';
+
+import 'components/utils.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,11 +28,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      scaffoldMessengerKey: Utils.messengerKey,
       title: 'Flutter Demo',
       theme: ThemeData(
         // Define the default brightness and colors.
         brightness: Brightness.dark,
-        primaryColor: Color(0X00AEEF),
+        primaryColor: Colors.blue,
 
         // Define the default font family.
         fontFamily: 'Candara',
@@ -47,9 +50,7 @@ class MyApp extends StatelessWidget {
       routes: {
         MyHomePage.routeName: (context) =>
         const MyHomePage(),
-        // MediaDetailsPage.routeName: (context) => const MediaDetailsPage(),
         SearchResultsPage.routeName: (context) => SearchResultsPage(),
-        VideosPage.routeName: (context) => VideosPage(),
         MyFavoritesPage.routeName: (context) => MyFavoritesPage(),
         SignInScreen.routeName: (context) => SignInScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
@@ -73,11 +74,25 @@ class MyApp extends StatelessWidget {
             builder: (context) {
               return MediaDetailsPage(
                   id: args.id,
-                  title: args.title,
-                  year: args.year,
-                  overview: args.overview,
-                  rating: args.rating,
+                  mediaType: args.mediaType,
                   backdrop: args.backdrop,
+              );
+            },
+          );
+        }
+        if (settings.name == VideosPage.routeName) {
+          // Cast the arguments to the correct
+          // type: ScreenArguments.
+          final args = settings.arguments as Map;
+
+          // Then, extract the required data from
+          // the arguments and pass the data to the
+          // correct screen.
+          return MaterialPageRoute(
+            builder: (context) {
+              print('main${args['videosList']}');
+              return VideosPage(
+                  videosList: args['videosList']
               );
             },
           );

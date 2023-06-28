@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:woodie/components/bottom_nav.dart';
-import 'package:woodie/model/media.dart';
+import 'package:Woodie/components/bottom_nav.dart';
+import 'package:Woodie/model/media.dart';
 
 import '../components/media_card.dart';
 

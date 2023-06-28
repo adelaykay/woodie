@@ -1,7 +1,7 @@
 import 'media.dart';
 
-class MovieDetails {
-  final int? id, runtime;
+class TvDetails {
+  final int? id, cznCount;
   final double? rating;
   final String? title, overview, language, year;
   final List<String>? genre;
@@ -9,7 +9,7 @@ class MovieDetails {
   final List<Media>? similar;
   final List<String> videosList;
 
-  MovieDetails({
+  TvDetails({
     required this.id,
     this.similar,
     this.rating,
@@ -17,14 +17,14 @@ class MovieDetails {
     this.overview,
     this.language,
     this.year,
-    this.runtime,
     this.genre,
     this.cast,
+    this.cznCount,
     required this.videosList
   });
 
-  factory MovieDetails.fromJson(Map<String, dynamic> json, String mediaType) {
-    return MovieDetails(
+  factory TvDetails.fromJson(Map<String, dynamic> json, String mediaType) {
+    return TvDetails(
         rating: json['vote_average'] == null
             ? 0.0
             : double.parse(json['vote_average'].toDouble().toStringAsFixed(1)),
@@ -34,19 +34,31 @@ class MovieDetails {
         id: json['id'] == null ? 0 : json['id'] as int,
         genre: json['genres'] == null ? [] : getGenre(json['genres']),
         cast: json['credits'] == null ? [] : getCast(json['credits']['cast']),
-        runtime: json['runtime'],
-        videosList: getVideosList(json['videos']['results'] as List),
         similar: json['similar'] == null
             ? []
-            : getSimilar(json['similar']['results'], mediaType));
+            : getSimilar(json['similar']['results'], mediaType),
+      cznCount: json['number_of_seasons'] as int,
+      videosList: getVideosList(json['videos']['results'] as List)
+    );
   }
 
-  static String? getTitle(Map a) {
-    if (a['title'] != null) {
-      return a['title'].toString();
+  static String? getTitle(Map data) {
+    if (data['name'] != null) {
+      return data['name'].toString();
     } else {
       return '';
     }
+  }
+
+  static List<String> getVideosList(List<dynamic> list){
+    List<String> vList = [];
+    if(list.isNotEmpty) {
+      for (var video in list) {
+        vList.add(video['key'] as String);
+      }
+    }
+    print(vList);
+    return vList;
   }
 
   static List<String>? getGenre(List<dynamic> g) {
@@ -69,17 +81,6 @@ class MovieDetails {
       return '';
     }
     return null;
-  }
-
-  static List<String> getVideosList(List<dynamic> list){
-    List<String> vList = [];
-    if(list.isNotEmpty) {
-      for (var video in list) {
-        vList.add(video['key'] as String);
-      }
-    }
-    print(vList);
-    return vList;
   }
 
   static List<Person> getCast(List<dynamic> c) {
@@ -123,9 +124,9 @@ class MovieDetails {
     return sim;
   }
 
-  static MovieDetails mediaFromSnapshot(
+  static TvDetails mediaFromSnapshot(
       Map<String, dynamic> snapshot, String mediaType) {
-    return MovieDetails.fromJson(snapshot, mediaType);
+    return TvDetails.fromJson(snapshot, mediaType);
   }
 }
 

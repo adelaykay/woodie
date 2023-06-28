@@ -1,7 +1,8 @@
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:woodie/pages/home.dart';
+import 'package:Woodie/pages/home.dart';
 import '../../../components/form_error.dart';
 import '../../../constants.dart';
 import '../../../keyboard.dart';
@@ -19,6 +20,9 @@ class _SignFormState extends State<SignForm> {
   String? password;
   bool? remember = false;
   final List<String?> errors = [];
+
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void addError({String? error}) {
     if (!errors.contains(error))
@@ -76,7 +80,8 @@ class _SignFormState extends State<SignForm> {
                 _formKey.currentState!.save();
                 // if all are valid then go to success screen
                 KeyboardUtil.hideKeyboard(context);
-                Navigator.pushNamed(context, MyHomePage.routeName);
+                login();
+                // Navigator.pushNamed(context, MyHomePage.routeName);
               }
             },
           ),
@@ -87,6 +92,7 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
+      controller: _passwordController,
       obscureText: true,
       onSaved: (newValue) => password = newValue,
       onChanged: (value) {
@@ -120,6 +126,7 @@ class _SignFormState extends State<SignForm> {
 
   TextFormField buildEmailFormField() {
     return TextFormField(
+      controller: _emailController,
       keyboardType: TextInputType.emailAddress,
       onSaved: (newValue) => email = newValue,
       onChanged: (value) {
@@ -149,5 +156,24 @@ class _SignFormState extends State<SignForm> {
         suffixIcon: SvgPicture.asset( "assets/icons/Mail.svg", height: getProportionateScreenHeight(8),),
       ),
     );
+  }
+
+  Future login() async {
+    showDialog(
+        context: context,
+        builder: (context) => Center(
+          child: CircularProgressIndicator(),
+        ));
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim());
+    } on FirebaseAuthException catch (e) {
+        print(e);
+    }
+
+    // Navigator.of(context) not working!
+    // navigatorKey.currentState!.popUntil((route) => route.isFirst);
+    Navigator.of(context).popUntil((route) => route.isFirst);
   }
 }

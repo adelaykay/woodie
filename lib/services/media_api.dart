@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:woodie/secret.dart';
+import 'package:Woodie/secret.dart';
 
 import '../model/media.dart';
 
 class MediaApi {
   static Future<List<Media>> getMedia(
-      {required String path,
+      {required String path, required String mediaType,
       String sortBy = 'popularity.desc',
       String query = ''}) async {
     final uri = Uri(
@@ -22,7 +22,6 @@ class MediaApi {
           'query': query.isEmpty ? null : query,
           'api_key': myAuthKey
         });
-    print(uri);
     http.Response response = await http.get(uri, headers: {
       'accept': 'application/json',
       'Authorization': myAccessToken
@@ -35,8 +34,7 @@ class MediaApi {
         _temp.add(i);
       }
     }
-    print(_temp[0]);
 
-    return Media.mediaFromSnapshot(_temp);
+    return Media.mediaFromSnapshot(_temp, mediaType);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:transparent_image/transparent_image.dart';
-import 'package:woodie/model/screen_arguments.dart';
+import 'package:Woodie/model/screen_arguments.dart';
 
 import '../model/media.dart';
 import '../pages/media_details_page.dart';
@@ -25,19 +25,18 @@ class MediaCard extends StatefulWidget {
 }
 
 class _MediaCardState extends State<MediaCard> {
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
         onTap: () =>
             Navigator.pushNamed(context, MediaDetailsPage.routeName, arguments: ScreenArguments(
               id: widget.movie.id,
-              title: widget.movie.title,
-              year: widget.movie.year,
-              overview: widget.movie.overview,
-              rating: widget.movie.rating,
               backdrop: (MediaQuery.of(context).size.width < 500)
                   ? '${widget.backdropPath}${widget.movie.poster}'
                   : '${widget.backdropPath}${widget.movie.backdrop}',
+              mediaType: widget.movie.mediaType
             )),
         child: Card(
           color: Colors.transparent,
@@ -48,9 +47,9 @@ class _MediaCardState extends State<MediaCard> {
               Expanded(
                 flex: 7,
                 child: Hero(
-                  tag: 'poster1',
+                  tag: '${widget.movie.id}',
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(20),
                     child: FadeInImage.memoryNetwork(
                       fit: BoxFit.fitHeight,
                       image: '${widget.posterPath}${widget.movie.poster}',

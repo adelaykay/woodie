@@ -1,5 +1,5 @@
-name: woodie
-description: A netflix clone of sorts.
+name: Woodie
+description: A Netflix clone, of sorts.
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -44,6 +44,9 @@ dependencies:
   flutter_rating_bar: ^4.0.1
   flutter_svg: ^2.0.7
   firebase_auth: ^4.6.3
+  fluttertoast: ^8.2.2
+  flutter_launcher_icons: ^0.13.1
+  youtube_player_flutter: ^8.1.2
 
 dev_dependencies:
   flutter_test:
@@ -56,6 +59,28 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+# A command-line tool which simplifies the task of updating your Flutter app's
+# launcher icon. Fully flexible, allowing you to choose what platform you wish
+# to update the launcher icon for and if you want, the option to keep your old
+# launcher icon in case you want to revert back sometime in the future.
+flutter_launcher_icons:
+  android: true
+  image_path_android: "assets/cyan_logo.png"
+  ios: true
+  image_path_ios: "assets/cyan_logo.png"
+  min_sdk_android: 18 # android min sdk min:16, default 21
+  web:
+    generate: true
+    image_path: "assets/cyan_logo.png"
+    background_color: "#000000"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "assets/cyan_logo.png"
+    icon_size: 48 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "assets/cyan_logo.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
