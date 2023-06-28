@@ -37,7 +37,7 @@ class _VideosPageState extends State<VideosPage> {
   void initState() {
     super.initState();
     _controller = YoutubePlayerController(
-      initialVideoId: widget.videosList!.first,
+      initialVideoId: widget.videosList.first,
       flags: const YoutubePlayerFlags(
         mute: false,
         autoPlay: true,
@@ -88,7 +88,7 @@ class _VideosPageState extends State<VideosPage> {
       player: YoutubePlayer(
         controller: _controller,
         showVideoProgressIndicator: true,
-        progressIndicatorColor: Colors.blueAccent,
+        progressIndicatorColor: Colors.white,
         topActions: <Widget>[
           const SizedBox(width: 8.0),
           Expanded(
@@ -118,22 +118,21 @@ class _VideosPageState extends State<VideosPage> {
         },
         onEnded: (data) {
           _controller
-              .load(widget.videosList![(widget.videosList!.indexOf(data.videoId) + 1) % widget.videosList!.length]);
+              .load(widget.videosList[(widget.videosList.indexOf(data.videoId) + 1) % widget.videosList.length]);
           _showSnackBar('Next Video Started!');
         },
       ),
       builder: (context, player) => Scaffold(
+        backgroundColor: Colors.black,
         appBar: AppBar(
+          toolbarHeight: 80,
+          backgroundColor: Colors.transparent,
           leading: Padding(
             padding: const EdgeInsets.only(left: 12.0),
             child: Image.asset(
-              'assets/ypf.png',
+              'assets/cyan_logo.png',
               fit: BoxFit.fitWidth,
             ),
-          ),
-          title: const Text(
-            'Youtube Player Flutter',
-            style: TextStyle(color: Colors.white),
           ),
           actions: [
             IconButton(
@@ -160,8 +159,6 @@ class _VideosPageState extends State<VideosPage> {
                   _space,
                   _text('Channel', _videoMetaData.author),
                   _space,
-                  _text('Video Id', _videoMetaData.videoId),
-                  _space,
                   Row(
                     children: [
                       _text(
@@ -176,43 +173,43 @@ class _VideosPageState extends State<VideosPage> {
                     ],
                   ),
                   _space,
-                  TextField(
-                    enabled: _isPlayerReady,
-                    controller: _idController,
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Enter youtube \<video id\> or \<link\>',
-                      fillColor: Colors.blueAccent.withAlpha(20),
-                      filled: true,
-                      hintStyle: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.blueAccent,
-                      ),
-                      suffixIcon: IconButton(
-                        icon: const Icon(Icons.clear),
-                        onPressed: () => _idController.clear(),
-                      ),
-                    ),
-                  ),
-                  _space,
-                  Row(
-                    children: [
-                      _loadCueButton('LOAD'),
-                      const SizedBox(width: 10.0),
-                      _loadCueButton('CUE'),
-                    ],
-                  ),
-                  _space,
+                  // TextField(
+                  //   enabled: _isPlayerReady,
+                  //   controller: _idController,
+                  //   decoration: InputDecoration(
+                  //     border: InputBorder.none,
+                  //     hintText: 'Enter youtube \<video id\> or \<link\>',
+                  //     fillColor: Colors.white.withAlpha(20),
+                  //     filled: true,
+                  //     hintStyle: const TextStyle(
+                  //       fontWeight: FontWeight.w300,
+                  //       color: Colors.white,
+                  //     ),
+                  //     suffixIcon: IconButton(
+                  //       icon: const Icon(Icons.clear),
+                  //       onPressed: () => _idController.clear(),
+                  //     ),
+                  //   ),
+                  // ),
+                  // _space,
+                  // Row(
+                  //   children: [
+                  //     _loadCueButton('LOAD'),
+                  //     const SizedBox(width: 10.0),
+                  //     _loadCueButton('CUE'),
+                  //   ],
+                  // ),
+                  // _space,
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
                         icon: const Icon(Icons.skip_previous),
                         onPressed: _isPlayerReady
-                            ? () => _controller.load(widget.videosList![
-                        (widget.videosList!.indexOf(_controller.metadata.videoId) -
+                            ? () => _controller.load(widget.videosList[
+                        (widget.videosList.indexOf(_controller.metadata.videoId) -
                             1) %
-                            widget.videosList!.length])
+                            widget.videosList.length])
                             : null,
                       ),
                       IconButton(
@@ -245,15 +242,15 @@ class _VideosPageState extends State<VideosPage> {
                       ),
                       FullScreenButton(
                         controller: _controller,
-                        color: Colors.blueAccent,
+                        color: Colors.white,
                       ),
                       IconButton(
                         icon: const Icon(Icons.skip_next),
                         onPressed: _isPlayerReady
-                            ? () => _controller.load(widget.videosList![
-                        (widget.videosList!.indexOf(_controller.metadata.videoId) +
+                            ? () => _controller.load(widget.videosList[
+                        (widget.videosList.indexOf(_controller.metadata.videoId) +
                             1) %
-                            widget.videosList!.length])
+                            widget.videosList.length])
                             : null,
                       ),
                     ],
@@ -286,22 +283,22 @@ class _VideosPageState extends State<VideosPage> {
                     ],
                   ),
                   _space,
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 800),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.0),
-                      color: _getStateColor(_playerState),
-                    ),
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      _playerState.toString(),
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w300,
-                        color: Colors.white,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
+                  // AnimatedContainer(
+                  //   duration: const Duration(milliseconds: 800),
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(20.0),
+                  //     color: _getStateColor(_playerState),
+                  //   ),
+                  //   padding: const EdgeInsets.all(8.0),
+                  //   child: Text(
+                  //     _playerState.toString(),
+                  //     style: const TextStyle(
+                  //       fontWeight: FontWeight.w300,
+                  //       color: Colors.white,
+                  //     ),
+                  //     textAlign: TextAlign.center,
+                  //   ),
+                  // ),
                 ],
               ),
             ),
@@ -317,14 +314,14 @@ class _VideosPageState extends State<VideosPage> {
       text: TextSpan(
         text: '$title : ',
         style: const TextStyle(
-          color: Colors.blueAccent,
+          color: Colors.white,
           fontWeight: FontWeight.bold,
         ),
         children: [
           TextSpan(
             text: value,
             style: const TextStyle(
-              color: Colors.blueAccent,
+              color: Colors.white,
               fontWeight: FontWeight.w300,
             ),
           ),
@@ -342,7 +339,7 @@ class _VideosPageState extends State<VideosPage> {
       case PlayerState.ended:
         return Colors.red;
       case PlayerState.playing:
-        return Colors.blueAccent;
+        return Colors.white;
       case PlayerState.paused:
         return Colors.orange;
       case PlayerState.buffering:
@@ -359,7 +356,7 @@ class _VideosPageState extends State<VideosPage> {
   Widget _loadCueButton(String action) {
     return Expanded(
       child: MaterialButton(
-        color: Colors.blueAccent,
+        color: Colors.white,
         onPressed: _isPlayerReady
             ? () {
           if (_idController.text.isNotEmpty) {
@@ -404,7 +401,7 @@ class _VideosPageState extends State<VideosPage> {
               fontSize: 16.0,
             ),
           ),
-          backgroundColor: Colors.blueAccent,
+          backgroundColor: Colors.white,
           behavior: SnackBarBehavior.floating,
           elevation: 1.0,
           shape: RoundedRectangleBorder(
