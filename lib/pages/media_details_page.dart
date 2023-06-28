@@ -244,7 +244,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                                 Text(
                                   widget.mediaType == 'movie'
                                       ? ' ${movieDetails.runtime} mins'
-                                      : '${tvDetails.cznCount} seasons',
+                                      : ' ${tvDetails.cznCount} seasons',
                                   style: TextStyle(color: Colors.white60),
                                 ),
                                 SizedBox(
@@ -258,7 +258,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                                 Text(
                                   widget.mediaType == 'movie'
                                       ? ' ${movieDetails.rating}'
-                                      : '${tvDetails.rating}',
+                                      : ' ${tvDetails.rating}',
                                   style: TextStyle(color: Colors.white60),
                                 )
                               ],
