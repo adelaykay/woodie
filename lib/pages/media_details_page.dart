@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:Woodie/model/movie_details.dart';
@@ -195,22 +196,33 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                       ),
                 isLoading
                     ? Text('')
-                    : videosList.isEmpty ? Text('') : Positioned(
-                        top: getProportionateScreenHeight(300),
-                        child: IconButton(
-                          splashColor: Colors.white,
-                          splashRadius: 50,
-                          onPressed: () {
-                            Navigator.pushNamed(context, VideosPage.routeName,
-                                arguments: {
-                                  'videosList': widget.mediaType == 'movie'
-                                      ? movieDetails.videosList
-                                      : tvDetails.videosList
-                                });
-                          },
-                          icon: Icon(Icons.play_arrow),
-                          iconSize: 100,
-                        ))
+                    : videosList.isEmpty
+                        ? Text('')
+                        : Positioned(
+                            top: getProportionateScreenHeight(300),
+                            child: IconButton(
+                              splashColor: Colors.white,
+                              splashRadius: 50,
+                              onPressed: () {
+                                Navigator.pushNamed(
+                                    context, VideosPage.routeName,
+                                    arguments: {
+                                      'videosList': widget.mediaType == 'movie'
+                                          ? movieDetails.videosList
+                                          : tvDetails.videosList
+                                    });
+                              },
+                              icon: Icon(Icons.play_arrow),
+                              iconSize: 100,
+                            )),
+                Positioned(
+                    top: 10,
+                    left: 10,
+                    child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: Icon(Icons.arrow_back))),
               ],
             ),
             isLoading
@@ -244,7 +256,9 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                                 Text(
                                   widget.mediaType == 'movie'
                                       ? ' ${movieDetails.runtime} mins'
-                                      : ' ${tvDetails.cznCount} seasons',
+                                      : (tvDetails.cznCount! > 1
+                                          ? ' ${tvDetails.cznCount} seasons'
+                                          : ' ${tvDetails.cznCount} season'),
                                   style: TextStyle(color: Colors.white60),
                                 ),
                                 SizedBox(

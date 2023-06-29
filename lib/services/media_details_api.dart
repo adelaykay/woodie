@@ -12,11 +12,11 @@ class MovieDetailsApi {
         path: path,
         queryParameters: {
           'append_to_response': 'videos,similar,credits',
-          'api_key': myAuthKey
+          'api_key': tmdbAuthKey
         });
     http.Response response = await http.get(uri, headers: {
       'accept': 'application/json',
-      'Authorization': myAccessToken
+      'Authorization': tmdbAccessToken
     });
     Map<String,dynamic> data = jsonDecode(response.body);
 

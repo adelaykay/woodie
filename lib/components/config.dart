@@ -7,7 +7,7 @@ import '../secret.dart';
 class Config {
   static Future<Map<String, String>> getImagePath() async {
     String url =
-        'https://api.themoviedb.org/3/configuration?api_key=$myAuthKey';
+        'https://api.themoviedb.org/3/configuration?api_key=$tmdbAuthKey';
     Response response = await get(Uri.parse(url));
     Map data = jsonDecode(response.body);
     String base = data['images']['base_url'];

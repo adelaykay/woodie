@@ -66,7 +66,6 @@ class _MediaCardState extends State<MediaCard> {
                 height: 10,
               ),
               Expanded(
-                flex: 1,
                 child: Padding(
                   padding: EdgeInsets.symmetric(horizontal: 8),
                   child: Text(
@@ -78,9 +77,8 @@ class _MediaCardState extends State<MediaCard> {
                 ),
               ),
               Expanded(
-                flex: 1,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     mainAxisSize: MainAxisSize.max,

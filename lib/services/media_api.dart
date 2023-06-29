@@ -20,11 +20,11 @@ class MediaApi {
           'page': '1',
           'sort_by': sortBy,
           'query': query.isEmpty ? null : query,
-          'api_key': myAuthKey
+          'api_key': tmdbAuthKey
         });
     http.Response response = await http.get(uri, headers: {
       'accept': 'application/json',
-      'Authorization': myAccessToken
+      'Authorization': tmdbAccessToken
     });
     Map data = jsonDecode(response.body);
     List _temp = [];

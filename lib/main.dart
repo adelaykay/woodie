@@ -1,3 +1,4 @@
+import 'package:Woodie/pages/videos/videos_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:Woodie/firebase_options.dart';
@@ -90,8 +91,25 @@ class MyApp extends StatelessWidget {
           // correct screen.
           return MaterialPageRoute(
             builder: (context) {
-              print('main${args['videosList']}');
+              // print('main${args['videosList']}');
               return VideosPage(
+                  videosList: args['videosList']
+              );
+            },
+          );
+        }
+        if (settings.name == VideoList.routeName) {
+          // Cast the arguments to the correct
+          // type: ScreenArguments.
+          final args = settings.arguments as Map;
+
+          // Then, extract the required data from
+          // the arguments and pass the data to the
+          // correct screen.
+          return MaterialPageRoute(
+            builder: (context) {
+              // print('main${args['videosList']}');
+              return VideoList(
                   videosList: args['videosList']
               );
             },

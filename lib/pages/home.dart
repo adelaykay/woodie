@@ -86,39 +86,36 @@ class _MyHomePageState extends State<MyHomePage> {
           leading: Image.asset(
             'assets/cyan_logo.png',
           ),
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              AnimSearchBar(
-                color: Colors.black54,
-                searchIconColor: Colors.cyan,
-                rtl: true,
-                width: 200,
-                textController: textController,
-                onSuffixTap: () {
-                  setState(() {
-                    textController.clear();
-                  });
-                },
-                onSubmitted: (String word) async {
-                  showDialog(
-                      context: context,
-                      builder: (context) => Center(
-                            child: CircularProgressIndicator(),
-                          ));
-                  List<Media> searchResponse;
-                  searchResponse = await MediaApi.getMedia(
-                      path: '3/search/multi', query: word, mediaType: '');
-                  Navigator.of(context)
-                      .popAndPushNamed('/search_results', arguments: {
-                    'results': searchResponse,
-                    'poster_path': posterPath,
-                    'backdrop_path': backdropPath
-                  });
-                },
-              ),
-            ],
-          ),
+          actions: [
+            AnimSearchBar(
+              color: Colors.black54,
+              searchIconColor: Colors.cyan,
+              rtl: true,
+              width: 200,
+              textController: textController,
+              onSuffixTap: () {
+                setState(() {
+                  textController.clear();
+                });
+              },
+              onSubmitted: (String word) async {
+                showDialog(
+                    context: context,
+                    builder: (context) => Center(
+                      child: CircularProgressIndicator(),
+                    ));
+                List<Media> searchResponse;
+                searchResponse = await MediaApi.getMedia(
+                    path: '3/search/multi', query: word, mediaType: '');
+                Navigator.of(context)
+                    .popAndPushNamed('/search_results', arguments: {
+                  'results': searchResponse,
+                  'poster_path': posterPath,
+                  'backdrop_path': backdropPath
+                });
+              },
+            ),
+          ],
           automaticallyImplyLeading: false,
           toolbarHeight: 75,
         ),
@@ -164,12 +161,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               ],
                             options: CarouselOptions(
                               initialPage: 0,
+                              autoPlay: true,
                               viewportFraction: 0.5,
                               aspectRatio: 1.1,
                               enlargeCenterPage: true,
                               enlargeStrategy: CenterPageEnlargeStrategy.zoom,
                               enlargeFactor: 0.5,
                               padEnds: true,
+                              clipBehavior: Clip.antiAliasWithSaveLayer
                             )),
                   ),
                   isLoading
@@ -183,7 +182,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     padding: const EdgeInsets.symmetric(vertical: 10.0),
                     child: isLoading
                         ? Text('')
-                        : Container(
+                        : SizedBox(
                             height: MediaQuery.of(context).size.height * 2 / 7,
                             width: MediaQuery.of(context).size.width,
                             child: CarouselSlider(
