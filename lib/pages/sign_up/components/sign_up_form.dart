@@ -8,7 +8,6 @@ import '../../../constants.dart';
 import '../../../services/add_user.dart';
 import '../../../size_config.dart';
 
-
 class SignUpForm extends StatefulWidget {
   @override
   _SignUpFormState createState() => _SignUpFormState();
@@ -53,7 +52,13 @@ class _SignUpFormState extends State<SignUpForm> {
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           ElevatedButton(
-            child: Text("Continue"),
+            style: ElevatedButton.styleFrom(
+                fixedSize: Size(getProportionateScreenWidth(300),
+                    getProportionateScreenHeight(40))),
+            child: Text(
+              "Continue",
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+            ),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();
@@ -97,7 +102,10 @@ class _SignUpFormState extends State<SignUpForm> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: SvgPicture.asset("assets/icons/Lock.svg", height: getProportionateScreenHeight(8),),
+        suffixIcon: SvgPicture.asset(
+          "assets/icons/Lock.svg",
+          height: getProportionateScreenHeight(8),
+        ),
       ),
     );
   }
@@ -130,7 +138,8 @@ class _SignUpFormState extends State<SignUpForm> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: SvgPicture.asset("assets/icons/Lock.svg", height: getProportionateScreenHeight(8)),
+        suffixIcon: SvgPicture.asset("assets/icons/Lock.svg",
+            height: getProportionateScreenHeight(8)),
       ),
     );
   }
@@ -164,7 +173,8 @@ class _SignUpFormState extends State<SignUpForm> {
         // If  you are using latest version of flutter then lable text and hint text shown like this
         // if you r using flutter less then 1.20.* then maybe this is not working properly
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: SvgPicture.asset( "assets/icons/Mail.svg", height: getProportionateScreenHeight(8)),
+        suffixIcon: SvgPicture.asset("assets/icons/Mail.svg",
+            height: getProportionateScreenHeight(8)),
       ),
     );
   }
@@ -175,9 +185,7 @@ class _SignUpFormState extends State<SignUpForm> {
     showDialog(
         context: context,
         barrierDismissible: false,
-        builder: (context) => Center(
-          child: CircularProgressIndicator()
-        ));
+        builder: (context) => Center(child: CircularProgressIndicator()));
     try {
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: _emailController.text.trim(),
@@ -189,7 +197,7 @@ class _SignUpFormState extends State<SignUpForm> {
       // }
       print(user);
     } on FirebaseAuthException catch (e) {
-        print('caught error $e');
+      print('caught error $e');
     }
     // Navigator.pop(context);
     Navigator.of(context).popUntil((route) => route.isFirst);

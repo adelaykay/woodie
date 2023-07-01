@@ -15,7 +15,7 @@ class MediaApi {
         path: path,
         queryParameters: {
           'include_adult': 'false',
-          'include_video': 'true',
+          'include_video': 'false',
           'language': 'en-US',
           'page': '1',
           'sort_by': sortBy,

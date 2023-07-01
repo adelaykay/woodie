@@ -32,7 +32,7 @@ class _MyBottomNavState extends State<MyBottomNav> {
           child: BottomNavigationBar(
             currentIndex: widget.idx,
             onTap: _onItemTapped,
-              backgroundColor: Colors.lightBlue.shade200.withOpacity(0.5),
+              backgroundColor: Colors.lightBlue.shade600.withOpacity(0.5),
               selectedItemColor: Color(0XFF00AEEF),
               iconSize: 40,
               items: [

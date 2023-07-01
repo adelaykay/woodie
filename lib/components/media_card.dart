@@ -56,7 +56,7 @@ class _MediaCardState extends State<MediaCard> {
                       placeholder: kTransparentImage,
                       imageErrorBuilder: (context, error, stackTrace) =>
                           Image.network(
-                        "https://loremflickr.com/g/240/360/book",
+                        "https://loremflickr.com/g/240/360/movie",
                       ),
                     ),
                   ),

@@ -1,3 +1,5 @@
+import 'package:Woodie/components/nav_drawer.dart';
+import 'package:Woodie/size_config.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Woodie/components/bottom_nav.dart';
@@ -18,7 +20,6 @@ class MyFavoritesPage extends StatefulWidget {
 class _MyFavoritesPageState extends State<MyFavoritesPage> {
   final user = FirebaseAuth.instance.currentUser;
 
-
   @override
   void initState() {
     // TODO: implement initState
@@ -31,13 +32,17 @@ class _MyFavoritesPageState extends State<MyFavoritesPage> {
       appBar: AppBar(
         title: Text('Favorites'),
       ),
+      drawer: NavDrawer(),
       body: user == null
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    child: Text('Sign in'),
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(getProportionateScreenWidth(300),
+                            getProportionateScreenHeight(40))),
+                    child: Text('Sign in', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                     onPressed: () {
                       Navigator.pushNamed(context, SignInScreen.routeName);
                     },
@@ -46,7 +51,10 @@ class _MyFavoritesPageState extends State<MyFavoritesPage> {
                     height: 20,
                   ),
                   ElevatedButton(
-                    child: Text('Sign up'),
+                    style: ElevatedButton.styleFrom(
+                        fixedSize: Size(getProportionateScreenWidth(300),
+                            getProportionateScreenHeight(40))),
+                    child: Text('Sign up', style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
                     onPressed: () {
                       Navigator.pushNamed(context, SignUpScreen.routeName);
                     },
@@ -58,9 +66,6 @@ class _MyFavoritesPageState extends State<MyFavoritesPage> {
       bottomNavigationBar: MyBottomNav(
         idx: 2,
       ),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        FirebaseAuth.instance.signOut();
-      }, child: Icon(Icons.logout),),
     );
   }
 }

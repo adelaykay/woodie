@@ -1,3 +1,4 @@
+import 'package:Woodie/components/nav_drawer.dart';
 import 'package:anim_search_bar/anim_search_bar.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -83,13 +84,15 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Colors.black45,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          leading: Image.asset(
-            'assets/cyan_logo.png',
+          title: Image.asset(
+            'assets/home_logo.png', fit: BoxFit.fitHeight, height: 40,
           ),
+          centerTitle: true,
+
           actions: [
             AnimSearchBar(
               color: Colors.black54,
-              searchIconColor: Colors.cyan,
+              searchIconColor: Colors.white,
               rtl: true,
               width: 200,
               textController: textController,
@@ -116,7 +119,7 @@ class _MyHomePageState extends State<MyHomePage> {
               },
             ),
           ],
-          automaticallyImplyLeading: false,
+          automaticallyImplyLeading: true,
           toolbarHeight: 75,
         ),
         body: RefreshIndicator(
@@ -162,6 +165,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             options: CarouselOptions(
                               initialPage: 0,
                               autoPlay: true,
+                              autoPlayInterval: Duration(seconds: 10),
                               viewportFraction: 0.5,
                               aspectRatio: 1.1,
                               enlargeCenterPage: true,
@@ -242,6 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
 
         bottomNavigationBar: MyBottomNav(idx: 0,),
+        drawer: NavDrawer(),
         extendBody: true,
       ),
   );

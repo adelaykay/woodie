@@ -1,3 +1,4 @@
+import 'package:Woodie/pages/videos/videos_list.dart';
 import 'package:Woodie/pages/videos/videos_page.dart';
 import 'package:Woodie/size_config.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -205,7 +206,7 @@ class _MediaDetailsPageState extends State<MediaDetailsPage> {
                               splashRadius: 50,
                               onPressed: () {
                                 Navigator.pushNamed(
-                                    context, VideosPage.routeName,
+                                    context, VideoList.routeName,
                                     arguments: {
                                       'videosList': widget.mediaType == 'movie'
                                           ? movieDetails.videosList

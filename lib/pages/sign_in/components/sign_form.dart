@@ -74,7 +74,10 @@ class _SignFormState extends State<SignForm> {
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(20)),
           ElevatedButton(
-            child: Text("Continue"),
+              style: ElevatedButton.styleFrom(
+                  fixedSize: Size(getProportionateScreenWidth(300),
+                      getProportionateScreenHeight(40))),
+            child: Text("Continue", style: TextStyle(fontWeight: FontWeight.bold,fontSize: 18),),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
                 _formKey.currentState!.save();

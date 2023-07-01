@@ -6,6 +6,7 @@ class VideoList extends StatefulWidget {
   final List<String> videosList;
 
   static const routeName = '/videos_list';
+
   const VideoList({super.key, required this.videosList});
 
   @override
@@ -16,38 +17,43 @@ class _VideoListState extends State<VideoList> {
   late List<YoutubePlayerController> _controllers = widget.videosList
       .map<YoutubePlayerController>(
         (videoId) => YoutubePlayerController(
-      initialVideoId: videoId,
-      flags: const YoutubePlayerFlags(
-        autoPlay: false,
-      ),
-    ),
-  )
+          initialVideoId: videoId,
+          flags: const YoutubePlayerFlags(
+            autoPlay: false,
+          ),
+        ),
+      )
       .toList();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        title: const Text('Video List Demo'),
+        title: const Text('Trailers'),
       ),
       body: ListView.separated(
+        padding: EdgeInsetsDirectional.all(20),
         itemBuilder: (context, index) {
-          return YoutubePlayer(
-            key: ObjectKey(_controllers[index]),
-            controller: _controllers[index],
-            actionsPadding: const EdgeInsets.only(left: 16.0),
-            bottomActions: [
-              CurrentPosition(),
-              const SizedBox(width: 10.0),
-              ProgressBar(isExpanded: true),
-              const SizedBox(width: 10.0),
-              RemainingDuration(),
-              FullScreenButton(),
-            ],
+          return ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: YoutubePlayer(
+              key: ObjectKey(_controllers[index]),
+              controller: _controllers[index],
+              actionsPadding: const EdgeInsets.only(left: 16.0),
+              bottomActions: [
+                CurrentPosition(),
+                const SizedBox(width: 10.0),
+                ProgressBar(isExpanded: true),
+                const SizedBox(width: 10.0),
+                RemainingDuration(),
+                FullScreenButton(),
+              ],
+            ),
           );
         },
         itemCount: _controllers.length,
-        separatorBuilder: (context, _) => const SizedBox(height: 10.0),
+        separatorBuilder: (context, _) => const SizedBox(height: 20.0),
       ),
     );
   }
