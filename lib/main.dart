@@ -1,3 +1,4 @@
+import 'package:Woodie/pages/update_profile/update_profile_screen.dart';
 import 'package:Woodie/pages/videos/videos_list.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,8 @@ class MyApp extends StatelessWidget {
         MyFavoritesPage.routeName: (context) => MyFavoritesPage(),
         SignInScreen.routeName: (context) => SignInScreen(),
         SignUpScreen.routeName: (context) => SignUpScreen(),
-        ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen()
+        ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
+        UpdateProfileScreen.routeName: (context) => UpdateProfileScreen()
       },
       // Provide a function to handle named routes.
       // Use this function to identify the named

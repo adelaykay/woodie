@@ -1,4 +1,6 @@
+import 'package:Woodie/pages/home.dart';
 import 'package:Woodie/pages/sign_in/sign_in_screen.dart';
+import 'package:Woodie/pages/update_profile/update_profile_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,6 @@ class NavDrawer extends StatefulWidget {
 class _NavDrawerState extends State<NavDrawer> {
   var user = FirebaseAuth.instance.currentUser;
 
-
   @override
   Widget build(BuildContext context) {
     var profpic = user?.photoURL ?? 'https://loremflickr.com/g/150/150/profile';
@@ -24,7 +25,7 @@ class _NavDrawerState extends State<NavDrawer> {
         style: TextStyle(fontSize: 18),
       ),
       accountEmail: Text('john.doe@email.com'),
-      currentAccountPicture: Image.network(profpic),
+      currentAccountPicture: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.network(profpic)),
       currentAccountPictureSize: Size.square(150),
     );
     return Container(
@@ -40,11 +41,9 @@ class _NavDrawerState extends State<NavDrawer> {
           ListTile(
             title: const Text(
               'Settings',
-              style: TextStyle(fontSize: 16),
             ),
             leading: const Icon(
               Icons.settings_outlined,
-              size: 30,
             ),
             onTap: () {
               Navigator.pop(context);
@@ -54,44 +53,42 @@ class _NavDrawerState extends State<NavDrawer> {
                     return SimpleDialog(
                       title: Text('Settings'),
                       children: [
-                        ListTile(leading: Icon(Icons.dark_mode_outlined), title: Text('Dark Mode'), trailing: Switch(value: true, onChanged: (bool value){setState(() {
-
-                        });},)),
-                        ListTile(leading: Icon(Icons.person), title: Text('Update Profile'),)
+                        ListTile(
+                            leading: Icon(Icons.dark_mode_outlined),
+                            title: Text('Dark Mode'),
+                            trailing: Switch(
+                              value: true,
+                              onChanged: (bool value) {
+                                setState(() {});
+                              },
+                            )),
+                        user != null ? ListTile(
+                          onTap: (){
+                            Navigator.popAndPushNamed(context, UpdateProfileScreen.routeName);
+                          },
+                          leading: Icon(Icons.person),
+                          title: Text('Update Profile'),
+                        ) : SizedBox()
                       ],
                     );
                   });
             },
           ),
-          ListTile(
-            title: const Text(
-              'About',
-              style: TextStyle(fontSize: 16),
-            ),
-            leading: const Icon(
-              Icons.info_outline,
-              size: 30,
-            ),
-            onTap: () {
-              Navigator.pop(context);
-              showAboutDialog(
-                  context: context,
-                  applicationIcon:
-                      Expanded(child: Image.asset('assets/logo.png')),
-                  applicationVersion: '1.0.0',
-                  applicationName: 'Woodie',
-                  applicationLegalese: 'A Netflix clone, of sorts');
-            },
+          AboutListTile(
+            icon: Icon(Icons.info_outline),
+            applicationLegalese:
+                'A Netflix clone, of sorts\nCreated by: Adeleke Olasope\nadelekeolasope@gmail.com',
+            applicationVersion: '1.0.0',
+            applicationName: 'Woodie',
+            applicationIcon: Expanded(child: Image.asset('assets/logo.png', height: 100,),),
           ),
           user == null
               ? ListTile(
                   title: const Text(
                     'Sign in / Sign up',
-                    style: TextStyle(fontSize: 16),
                   ),
                   leading: const Icon(
                     Icons.login,
-                    size: 30,
                   ),
                   onTap: () {
                     Navigator.popAndPushNamed(context, SignInScreen.routeName);
@@ -108,7 +105,7 @@ class _NavDrawerState extends State<NavDrawer> {
                   ),
                   onTap: () {
                     FirebaseAuth.instance.signOut();
-                    Navigator.popUntil(context, (route) => route.isFirst);
+                    Navigator.popAndPushNamed(context, MyHomePage.routeName);
                   },
                 ),
         ],

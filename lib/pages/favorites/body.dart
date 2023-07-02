@@ -46,10 +46,11 @@ class _BodyState extends State<Body> {
     )
         : _favorites.isNotEmpty ? OrientationBuilder(builder: (context, orientation) {
       return GridView(
-        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 5),
+        padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 10),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: orientation == Orientation.portrait ? 2 : 3),
-        children: _favorites.map((e) => MediaCard(movie: e, posterPath: e.poster, backdropPath: '')).toList()
+          childAspectRatio: 0.5,
+            crossAxisCount: orientation == Orientation.portrait ? 3 : 4),
+        children: _favorites.map((e) => MediaCard(hideTitleAndRating: false, movie: e, posterPath: e.poster, backdropPath: '')).toList()
         );
     }) : Center(child: Text('You currently have no favorites, add content to favorites to view them here'),);
   }
