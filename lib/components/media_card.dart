@@ -11,13 +11,15 @@ class MediaCard extends StatefulWidget {
   final Media movie;
   final String? posterPath;
   final String? backdropPath;
+  final bool hideTitleAndRating;
 
   const MediaCard(
       {Key? key,
       this.height = 300,
       required this.movie,
       required this.posterPath,
-      required this.backdropPath})
+      required this.backdropPath,
+      this.hideTitleAndRating = false})
       : super(key: key);
 
   @override
@@ -25,28 +27,29 @@ class MediaCard extends StatefulWidget {
 }
 
 class _MediaCardState extends State<MediaCard> {
-
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-        onTap: () =>
-            Navigator.pushNamed(context, MediaDetailsPage.routeName, arguments: ScreenArguments(
-              id: widget.movie.id,
-              backdrop: (MediaQuery.of(context).size.width < 500)
-                  ? '${widget.backdropPath}${widget.movie.poster}'
-                  : '${widget.backdropPath}${widget.movie.backdrop}',
-              mediaType: widget.movie.mediaType
-            )),
+        onTap: () => Navigator.pushNamed(context, MediaDetailsPage.routeName,
+            arguments: ScreenArguments(
+                id: widget.movie.id,
+                backdrop: (MediaQuery.of(context).size.width < 500)
+                    ? '${widget.backdropPath}${widget.movie.poster}'
+                    : '${widget.backdropPath}${widget.movie.backdrop}',
+                mediaType: widget.movie.mediaType)),
         child: Card(
+          elevation: 8,
           color: Colors.transparent,
           shadowColor: Colors.transparent,
           surfaceTintColor: Colors.transparent,
-          child: Column(
-            children: [
-              Expanded(
-                flex: 7,
-                child: Hero(
+          child: widget.hideTitleAndRating
+              ? Hero(
                   tag: '${widget.movie.id}',
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
@@ -60,49 +63,69 @@ class _MediaCardState extends State<MediaCard> {
                       ),
                     ),
                   ),
-                ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    '${widget.movie.title}',
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.max,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      RatingBarIndicator(
-                          rating: widget.movie.rating! / 2.0,
-                          itemCount: 5,
-                          itemSize: 10,
-                          itemBuilder: (context, index) => Icon(
-                                Icons.star,
-                                color: Colors.amber,
-                            size: 5,
-                              )),
-                      Text(
-                        '${widget.movie.year}',
-                        style: TextStyle(fontSize: 12),
+                )
+              : Column(
+                  children: [
+                    Expanded(
+                      flex: 7,
+                      child: Hero(
+                        tag: '${widget.movie.id}',
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(20),
+                          child: FadeInImage.memoryNetwork(
+                            fit: BoxFit.fitHeight,
+                            image: '${widget.posterPath}${widget.movie.poster}',
+                            placeholder: kTransparentImage,
+                            imageErrorBuilder: (context, error, stackTrace) =>
+                                Image.network(
+                              "https://loremflickr.com/g/240/360/movie",
+                            ),
+                          ),
+                        ),
                       ),
-                    ],
-                  ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8),
+                        child: Text(
+                          '${widget.movie.title}',
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 1,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12.0, vertical: 0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.max,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            RatingBarIndicator(
+                                rating: widget.movie.rating! / 2.0,
+                                itemCount: 5,
+                                itemSize: 10,
+                                itemBuilder: (context, index) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                      size: 5,
+                                    )),
+                            Text(
+                              '${widget.movie.year}',
+                              style: TextStyle(fontSize: 12),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
         ));
   }
 }

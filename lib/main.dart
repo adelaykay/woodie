@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         // Define the default brightness and colors.
         brightness: Brightness.dark,
-        primaryColor: Colors.blue,
+        primaryColor: Colors.lightBlue,
 
         // Define the default font family.
         fontFamily: 'Candara',

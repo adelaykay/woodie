@@ -12,6 +12,7 @@ import '../model/media.dart';
 
 class MyHomePage extends StatefulWidget {
   static const routeName = '/';
+
   const MyHomePage({Key? key}) : super(key: key);
 
   @override
@@ -44,9 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
       Config.getImagePath(),
       MediaApi.getMedia(path: '3/movie/upcoming', mediaType: 'movie'),
       MediaApi.getMedia(path: '/3/discover/movie', mediaType: 'movie'),
-      MediaApi.getMedia(
-        path: '3/tv/top_rated', mediaType: 'tv'
-      ),
+      MediaApi.getMedia(path: '3/tv/top_rated', mediaType: 'tv'),
     ]).then((List response) {
       imageUrl = response[0];
       _upcoming = response[1];
@@ -60,93 +59,110 @@ class _MyHomePageState extends State<MyHomePage> {
     }).catchError((e) => print(e));
   }
 
-    DateTime timeBackPressed = DateTime.now();
+  DateTime timeBackPressed = DateTime.now();
+
+  final GlobalKey<ScaffoldState> _key = GlobalKey();
+
   @override
   Widget build(BuildContext context) => WillPopScope(
-    onWillPop: () async {
-      final difference = DateTime.now().difference(timeBackPressed);
-      final isExitWarning = difference >= Duration(seconds: 2);
+        onWillPop: () async {
+          final difference = DateTime.now().difference(timeBackPressed);
+          final isExitWarning = difference >= Duration(seconds: 2);
 
-      timeBackPressed = DateTime.now();
+          timeBackPressed = DateTime.now();
 
-      if(isExitWarning){
-        const message = 'Press back again to exit';
-        Fluttertoast.showToast(msg: message, fontSize: 18);
+          if (isExitWarning) {
+            const message = 'Press back again to exit';
+            Fluttertoast.showToast(msg: message, fontSize: 18);
 
-        return false;
-      } else{
-        Fluttertoast.cancel();
-        return true;
-      }
-
-    },
-    child: Scaffold(
-        backgroundColor: Colors.black45,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Image.asset(
-            'assets/home_logo.png', fit: BoxFit.fitHeight, height: 40,
-          ),
-          centerTitle: true,
-
-          actions: [
-            AnimSearchBar(
-              color: Colors.black54,
-              searchIconColor: Colors.white,
-              rtl: true,
-              width: 200,
-              textController: textController,
-              onSuffixTap: () {
-                setState(() {
-                  textController.clear();
-                });
-              },
-              onSubmitted: (String word) async {
-                showDialog(
-                    context: context,
-                    builder: (context) => Center(
-                      child: CircularProgressIndicator(),
-                    ));
-                List<Media> searchResponse;
-                searchResponse = await MediaApi.getMedia(
-                    path: '3/search/multi', query: word, mediaType: '');
-                Navigator.of(context)
-                    .popAndPushNamed('/search_results', arguments: {
-                  'results': searchResponse,
-                  'poster_path': posterPath,
-                  'backdrop_path': backdropPath
-                });
-              },
+            return false;
+          } else {
+            Fluttertoast.cancel();
+            return true;
+          }
+        },
+        child: Scaffold(
+          key: _key,
+          backgroundColor: Theme.of(context).brightness == Brightness.light
+              ? Colors.blue[200]
+              : Colors.black45,
+          appBar: AppBar(
+            toolbarOpacity: 0.8,
+            forceMaterialTransparency: true,
+            leading: IconButton(
+              onPressed: () => _key.currentState?.openDrawer(),
+              icon: const Icon(
+                Icons.menu,
+              ),
+              color: Theme.of(context).primaryColorLight,
             ),
-          ],
-          automaticallyImplyLeading: true,
-          toolbarHeight: 75,
-        ),
-        body: RefreshIndicator(
-          key: _freeRefreshIndicatorKey,
-          onRefresh: () async {
-            return getData();
-          },
-          child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  isLoading
-                      ? Text('')
-                      : Text(
-                          'Coming Soon',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: isLoading
+            backgroundColor: Colors.transparent,
+            title: Image.asset(
+              Theme.of(context).brightness == Brightness.light
+                  ? 'assets/black_home_logo.png'
+                  : 'assets/cyan_home_logo.png',
+              fit: BoxFit.fitHeight,
+              height: 40,
+            ),
+            centerTitle: true,
+            actions: [
+              AnimSearchBar(
+                color: Colors.transparent,
+                searchIconColor: Theme.of(context).primaryColorLight,
+                rtl: true,
+                width: 200,
+                textController: textController,
+                onSuffixTap: () {
+                  setState(() {
+                    textController.clear();
+                  });
+                },
+                onSubmitted: (String word) async {
+                  showDialog(
+                      context: context,
+                      builder: (context) => Center(
+                            child: CircularProgressIndicator(),
+                          ));
+                  List<Media> searchResponse;
+                  searchResponse = await MediaApi.getMedia(
+                      path: '3/search/multi', query: word, mediaType: '');
+                  Navigator.of(context)
+                      .popAndPushNamed('/search_results', arguments: {
+                    'results': searchResponse,
+                    'poster_path': posterPath,
+                    'backdrop_path': backdropPath
+                  });
+                },
+              ),
+            ],
+            automaticallyImplyLeading: false,
+            toolbarHeight: 75,
+          ),
+          body: RefreshIndicator(
+            key: _freeRefreshIndicatorKey,
+            onRefresh: () async {
+              return getData();
+            },
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    isLoading
+                        ? Text('')
+                        : Text(
+                            'Coming Soon',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                    isLoading
                         ? Padding(
                             padding: EdgeInsets.only(
-                                top: MediaQuery.of(context).size.height * 4 / 11),
+                                top: MediaQuery.of(context).size.height *
+                                    4 /
+                                    11),
                             child: Center(
                               child: CircularProgressIndicator(
                                 color: Colors.cyan,
@@ -160,34 +176,34 @@ class _MyHomePageState extends State<MyHomePage> {
                                     (index) => MediaCard(
                                         movie: _upcoming[index],
                                         posterPath: posterPath,
-                                        backdropPath: backdropPath))
+                                        backdropPath: backdropPath,
+                                      hideTitleAndRating: true
+                                    ))
                               ],
                             options: CarouselOptions(
-                              initialPage: 0,
-                              autoPlay: true,
-                              autoPlayInterval: Duration(seconds: 10),
-                              viewportFraction: 0.5,
-                              aspectRatio: 1.1,
-                              enlargeCenterPage: true,
-                              enlargeStrategy: CenterPageEnlargeStrategy.zoom,
-                              enlargeFactor: 0.5,
-                              padEnds: true,
-                              clipBehavior: Clip.antiAliasWithSaveLayer
-                            )),
-                  ),
-                  isLoading
-                      ? Text('')
-                      : Text(
-                          'Trending Movies',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
-                    child: isLoading
+                                initialPage: 0,
+                                autoPlay: true,
+                                autoPlayInterval: Duration(seconds: 10),
+                                viewportFraction: 0.5,
+                                aspectRatio: 1.1,
+                                enlargeCenterPage: true,
+                                enlargeStrategy:
+                                    CenterPageEnlargeStrategy.zoom,
+                                enlargeFactor: 0.5,
+                                padEnds: true,
+                                clipBehavior: Clip.antiAliasWithSaveLayer)),
+                    isLoading
+                        ? Text('')
+                        : Text(
+                            'Trending Movies',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                    isLoading
                         ? Text('')
                         : SizedBox(
-                            height: MediaQuery.of(context).size.height * 2 / 7,
+                            height:
+                                MediaQuery.of(context).size.height * 2 / 7,
                             width: MediaQuery.of(context).size.width,
                             child: CarouselSlider(
                                 items: [
@@ -206,48 +222,48 @@ class _MyHomePageState extends State<MyHomePage> {
                                     pageSnapping: false,
                                     padEnds: false)),
                           ),
-                  ),
-                  isLoading
-                      ? Text('')
-                      : Text(
-                          'TV Shows',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold),
-                        ),
-                  isLoading
-                      ? Text('')
-                      : SizedBox(
-                          height: MediaQuery.of(context).size.height * 2 / 7,
-                          width: MediaQuery.of(context).size.width,
-                          child: CarouselSlider(
-                              items: [
-                                ...List.generate(
-                                    _tv.length,
-                                    (index) => MediaCard(
-                                        movie: _tv[index],
-                                        posterPath: posterPath,
-                                        backdropPath: backdropPath))
-                              ],
-                              options: CarouselOptions(
-                                  initialPage: 0,
-                                  enableInfiniteScroll: false,
-                                  viewportFraction: 0.3,
-                                  aspectRatio: 1.9,
-                                  pageSnapping: false,
-                                  padEnds: false)),
-                        ),
-                  SizedBox(
-                    height: 60,
-                  )
-                ],
+                    isLoading
+                        ? Text('')
+                        : Text(
+                            'TV Shows',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                    isLoading
+                        ? Text('')
+                        : SizedBox(
+                            height: MediaQuery.of(context).size.height * 2 / 7,
+                            width: MediaQuery.of(context).size.width,
+                            child: CarouselSlider(
+                                items: [
+                                  ...List.generate(
+                                      _tv.length,
+                                      (index) => MediaCard(
+                                          movie: _tv[index],
+                                          posterPath: posterPath,
+                                          backdropPath: backdropPath))
+                                ],
+                                options: CarouselOptions(
+                                    initialPage: 0,
+                                    enableInfiniteScroll: false,
+                                    viewportFraction: 0.3,
+                                    aspectRatio: 1.9,
+                                    pageSnapping: false,
+                                    padEnds: false)),
+                          ),
+                    SizedBox(
+                      height: 60,
+                    )
+                  ],
+                ),
               ),
             ),
           ),
+          bottomNavigationBar: MyBottomNav(
+            idx: 0,
+          ),
+          drawer: NavDrawer(),
+          extendBody: true,
         ),
-
-        bottomNavigationBar: MyBottomNav(idx: 0,),
-        drawer: NavDrawer(),
-        extendBody: true,
-      ),
-  );
+      );
 }

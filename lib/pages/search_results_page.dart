@@ -26,19 +26,24 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
       body: OrientationBuilder(builder: (context, orientation) {
         return GridView(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: orientation == Orientation.portrait ? 2 : 3),
+              crossAxisCount: orientation == Orientation.portrait ? 2 : 3,
+            childAspectRatio: 0.7
+          ),
           children: [
             ...List.generate(
                 _results.length,
                 (index) => MediaCard(
-                    movie: _results[index],
-                    height: MediaQuery.of(context).size.height,
-                    posterPath: data['poster_path'],
-                    backdropPath: data['backdrop_path']))
+                      movie: _results[index],
+                      height: MediaQuery.of(context).size.height,
+                      posterPath: data['poster_path'],
+                      backdropPath: data['backdrop_path'],
+                      hideTitleAndRating: true,
+                    ))
           ],
         );
       }),
       bottomNavigationBar: MyBottomNav(),
+      extendBody: true,
     );
   }
 }
