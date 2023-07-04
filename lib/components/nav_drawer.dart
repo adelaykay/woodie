@@ -16,15 +16,16 @@ class _NavDrawerState extends State<NavDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    print(user);
     var profpic = user?.photoURL ?? 'https://loremflickr.com/g/150/150/profile';
     final drawerHeader = UserAccountsDrawerHeader(
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(color: Colors.lightBlue),
       accountName: Text(
-        'John Doe',
+        '${user?.displayName}',
         style: TextStyle(fontSize: 18),
       ),
-      accountEmail: Text('john.doe@email.com'),
+      accountEmail: Text('${user?.email}'),
       currentAccountPicture: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.network(profpic)),
       currentAccountPictureSize: Size.square(150),
     );
@@ -97,11 +98,9 @@ class _NavDrawerState extends State<NavDrawer> {
               : ListTile(
                   title: const Text(
                     'Sign out',
-                    style: TextStyle(fontSize: 16),
                   ),
                   leading: const Icon(
                     Icons.logout,
-                    size: 30,
                   ),
                   onTap: () {
                     FirebaseAuth.instance.signOut();

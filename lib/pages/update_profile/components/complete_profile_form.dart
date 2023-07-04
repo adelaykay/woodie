@@ -1,4 +1,5 @@
 import 'package:Woodie/pages/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../components/form_error.dart';
@@ -11,6 +12,9 @@ class CompleteProfileForm extends StatefulWidget {
 }
 
 class _CompleteProfileFormState extends State<CompleteProfileForm> {
+  final firstNameController = TextEditingController();
+  final lastNameController = TextEditingController();
+  final phoneNumberController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   final List<String?> errors = [];
   String? firstName;
@@ -52,16 +56,15 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
           buildLastNameFormField(),
           SizedBox(height: getProportionateScreenHeight(30)),
           buildPhoneNumberFormField(),
-          SizedBox(height: getProportionateScreenHeight(30)),
-          buildAddressFormField(),
+          // SizedBox(height: getProportionateScreenHeight(30)),
+          // buildAddressFormField(),
           FormError(errors: errors),
           SizedBox(height: getProportionateScreenHeight(40)),
           ElevatedButton(
             child: Text("Continue"),
             onPressed: () {
               if (_formKey.currentState!.validate()) {
-                // ToDo: Implement update profile method
-                // updateProfile();
+                updateProfile();
                 ScaffoldMessenger.of(context).showSnackBar(profileUpdated);
                 Navigator.pushNamed(context, MyHomePage.routeName);
               }
@@ -101,6 +104,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
 
   TextFormField buildPhoneNumberFormField() {
     return TextFormField(
+      controller: phoneNumberController,
       keyboardType: TextInputType.phone,
       onSaved: (newValue) => phoneNumber = newValue,
       onChanged: (value) {
@@ -129,6 +133,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
 
   TextFormField buildLastNameFormField() {
     return TextFormField(
+      controller: lastNameController,
       onSaved: (newValue) => lastName = newValue,
       decoration: InputDecoration(
         labelText: "Last Name",
@@ -143,6 +148,7 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
 
   TextFormField buildFirstNameFormField() {
     return TextFormField(
+      controller: firstNameController,
       onSaved: (newValue) => firstName = newValue,
       onChanged: (value) {
         if (value.isNotEmpty) {
@@ -166,5 +172,14 @@ class _CompleteProfileFormState extends State<CompleteProfileForm> {
         suffixIcon: SvgPicture.asset("assets/icons/User.svg"),
       ),
     );
+  }
+
+  void updateProfile() async {
+    String displayName = '${firstNameController.text.trim()} ${lastNameController.text.trim()}';
+    final user = FirebaseAuth.instance.currentUser;
+    // ToDo: Implement update user phone number
+    // PhoneAuthCredential phoneAuthCred = ;
+    // await user?.updatePhoneNumber(PhoneAuthCredential phoneAuthCred);
+    await user?.updateDisplayName(displayName);
   }
 }

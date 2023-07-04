@@ -1,3 +1,4 @@
+import 'package:Woodie/pages/favorites/favorites.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -200,7 +201,7 @@ class _SignUpFormState extends State<SignUpForm> {
       print('caught error $e');
     }
     // Navigator.pop(context);
-    Navigator.of(context).popUntil((route) => route.isFirst);
+    Navigator.of(context).pushNamedAndRemoveUntil(MyFavoritesPage.routeName, (route) => route.isFirst);
     // navigatorKey.currentState!.popUntil((route) => route.isFirst);
   }
 }
