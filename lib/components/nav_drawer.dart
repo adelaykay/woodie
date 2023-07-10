@@ -18,7 +18,7 @@ class _NavDrawerState extends State<NavDrawer> {
   Widget build(BuildContext context) {
     print(user);
     var profpic = user?.photoURL ?? 'https://loremflickr.com/g/150/150/profile';
-    final drawerHeader = UserAccountsDrawerHeader(
+    final drawerHeader = user != null ? UserAccountsDrawerHeader(
       margin: EdgeInsets.only(bottom: 20),
       decoration: BoxDecoration(color: Colors.lightBlue),
       accountName: Text(
@@ -28,7 +28,7 @@ class _NavDrawerState extends State<NavDrawer> {
       accountEmail: Text('${user?.email}'),
       currentAccountPicture: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.network(profpic)),
       currentAccountPictureSize: Size.square(150),
-    );
+    ) : null;
     return Container(
       width: MediaQuery.of(context).size.width / 1.5,
       decoration: BoxDecoration(

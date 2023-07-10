@@ -27,6 +27,10 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<Media> _movies;
   late List<Media> _tv;
   late List<Media> _upcoming;
+  late List<Media> _action;
+  late List<Media> _comedy;
+  late List<Media> _horror;
+  late List<Media> _naija;
 
   final GlobalKey<RefreshIndicatorState> _freeRefreshIndicatorKey =
       GlobalKey<RefreshIndicatorState>();
@@ -46,11 +50,19 @@ class _MyHomePageState extends State<MyHomePage> {
       MediaApi.getMedia(path: '3/movie/upcoming', mediaType: 'movie'),
       MediaApi.getMedia(path: '/3/discover/movie', mediaType: 'movie'),
       MediaApi.getMedia(path: '3/tv/top_rated', mediaType: 'tv'),
+      MediaApi.getMedia(path: '/3/discover/movie', mediaType: 'movie', genre: '28'),
+      MediaApi.getMedia(path: '/3/discover/movie', mediaType: 'movie', genre: '35'),
+      MediaApi.getMedia(path: '/3/discover/movie', mediaType: 'movie', genre: '27'),
+      MediaApi.getMedia(path: '/3/discover/movie', mediaType: 'movie', country: 'NG'),
     ]).then((List response) {
       imageUrl = response[0];
       _upcoming = response[1];
       _movies = response[2];
       _tv = response[3];
+      _action = response[4];
+      _comedy = response[5];
+      _horror = response[6];
+      _naija = response[7];
       posterPath = imageUrl['posterPath']!;
       backdropPath = imageUrl['backdropPath']!;
       setState(() {
@@ -251,6 +263,122 @@ class _MyHomePageState extends State<MyHomePage> {
                                     pageSnapping: false,
                                     padEnds: false)),
                           ),
+                    isLoading
+                        ? Text('')
+                        : Text(
+                      'Action',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : SizedBox(
+                      height: MediaQuery.of(context).size.height * 2 / 7,
+                      width: MediaQuery.of(context).size.width,
+                      child: CarouselSlider(
+                          items: [
+                            ...List.generate(
+                                _action.length,
+                                    (index) => MediaCard(
+                                    movie: _action[index],
+                                    posterPath: posterPath,
+                                    backdropPath: backdropPath))
+                          ],
+                          options: CarouselOptions(
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 0.3,
+                              aspectRatio: 1.9,
+                              pageSnapping: false,
+                              padEnds: false)),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : Text(
+                      'Comedy',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : SizedBox(
+                      height: MediaQuery.of(context).size.height * 2 / 7,
+                      width: MediaQuery.of(context).size.width,
+                      child: CarouselSlider(
+                          items: [
+                            ...List.generate(
+                                _comedy.length,
+                                    (index) => MediaCard(
+                                    movie: _comedy[index],
+                                    posterPath: posterPath,
+                                    backdropPath: backdropPath))
+                          ],
+                          options: CarouselOptions(
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 0.3,
+                              aspectRatio: 1.9,
+                              pageSnapping: false,
+                              padEnds: false)),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : Text(
+                      'Horror',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : SizedBox(
+                      height: MediaQuery.of(context).size.height * 2 / 7,
+                      width: MediaQuery.of(context).size.width,
+                      child: CarouselSlider(
+                          items: [
+                            ...List.generate(
+                                _horror.length,
+                                    (index) => MediaCard(
+                                    movie: _horror[index],
+                                    posterPath: posterPath,
+                                    backdropPath: backdropPath))
+                          ],
+                          options: CarouselOptions(
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 0.3,
+                              aspectRatio: 1.9,
+                              pageSnapping: false,
+                              padEnds: false)),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : Text(
+                      'Naija',
+                      style: TextStyle(
+                          fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
+                    isLoading
+                        ? Text('')
+                        : SizedBox(
+                      height: MediaQuery.of(context).size.height * 2 / 7,
+                      width: MediaQuery.of(context).size.width,
+                      child: CarouselSlider(
+                          items: [
+                            ...List.generate(
+                                _naija.length,
+                                    (index) => MediaCard(
+                                    movie: _naija[index],
+                                    posterPath: posterPath,
+                                    backdropPath: backdropPath))
+                          ],
+                          options: CarouselOptions(
+                              initialPage: 0,
+                              enableInfiniteScroll: false,
+                              viewportFraction: 0.3,
+                              aspectRatio: 1.9,
+                              pageSnapping: false,
+                              padEnds: false)),
+                    ),
                     SizedBox(
                       height: 60,
                     )
