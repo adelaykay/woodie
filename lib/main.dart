@@ -23,10 +23,23 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
+  @override
+  _MyAppState createState() => _MyAppState();
+
+  static _MyAppState of(BuildContext context) => context.findAncestorStateOfType<_MyAppState>()!;
+
+  static void setTheme(bool isSwitched) {
+
+  }
+}
+
+class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
+
+  ThemeMode _themeMode = ThemeMode.light;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -34,7 +47,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         // Define the default brightness and colors.
-        brightness: Brightness.dark,
+        brightness: Brightness.light,
         primaryColor: Colors.lightBlue,
 
         // Define the default font family.
@@ -48,6 +61,8 @@ class MyApp extends StatelessWidget {
           bodyMedium: TextStyle(fontSize: 14, fontFamily: 'Candara'),
         ),
       ),
+      darkTheme: ThemeData.dark(),
+      themeMode: _themeMode,
       initialRoute: '/',
       routes: {
         MyHomePage.routeName: (context) =>
@@ -129,5 +144,10 @@ class MyApp extends StatelessWidget {
       },
       debugShowCheckedModeBanner: false,
     );
+  }
+  void changeTheme(bool isSwitched){
+    setState(() {
+      _themeMode = isSwitched?ThemeMode.dark:ThemeMode.light;
+    });
   }
 }

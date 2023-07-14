@@ -27,6 +27,7 @@ class MediaCard extends StatefulWidget {
 }
 
 class _MediaCardState extends State<MediaCard> {
+
   @override
   void initState() {
     // TODO: implement initState

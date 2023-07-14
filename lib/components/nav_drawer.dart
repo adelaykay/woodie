@@ -1,3 +1,4 @@
+import 'package:Woodie/main.dart';
 import 'package:Woodie/pages/home.dart';
 import 'package:Woodie/pages/sign_in/sign_in_screen.dart';
 import 'package:Woodie/pages/update_profile/update_profile_screen.dart';
@@ -14,21 +15,27 @@ class NavDrawer extends StatefulWidget {
 class _NavDrawerState extends State<NavDrawer> {
   var user = FirebaseAuth.instance.currentUser;
 
+  bool isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
-    print(user);
+    // print(user);
     var profpic = user?.photoURL ?? 'https://loremflickr.com/g/150/150/profile';
-    final drawerHeader = user != null ? UserAccountsDrawerHeader(
-      margin: EdgeInsets.only(bottom: 20),
-      decoration: BoxDecoration(color: Colors.lightBlue),
-      accountName: Text(
-        '${user?.displayName}',
-        style: TextStyle(fontSize: 18),
-      ),
-      accountEmail: Text('${user?.email}'),
-      currentAccountPicture: ClipRRect(borderRadius: BorderRadius.circular(20), child: Image.network(profpic)),
-      currentAccountPictureSize: Size.square(150),
-    ) : null;
+    final drawerHeader = user != null
+        ? UserAccountsDrawerHeader(
+            margin: EdgeInsets.only(bottom: 20),
+            decoration: BoxDecoration(color: Colors.lightBlue),
+            accountName: Text(
+              '${user?.displayName}',
+              style: TextStyle(fontSize: 18),
+            ),
+            accountEmail: Text('${user?.email}'),
+            currentAccountPicture: ClipRRect(
+                borderRadius: BorderRadius.circular(20),
+                child: Image.network(profpic)),
+            currentAccountPictureSize: Size.square(150),
+          )
+        : null;
     return Container(
       width: MediaQuery.of(context).size.width / 1.5,
       decoration: BoxDecoration(
@@ -54,34 +61,48 @@ class _NavDrawerState extends State<NavDrawer> {
                     return SimpleDialog(
                       title: Text('Settings'),
                       children: [
-                        ListTile(
-                            leading: Icon(Icons.dark_mode_outlined),
-                            title: Text('Dark Mode'),
-                            trailing: Switch(
-                              value: true,
-                              onChanged: (bool value) {
-                                setState(() {});
-                              },
-                            )),
-                        user != null ? ListTile(
-                          onTap: (){
-                            Navigator.popAndPushNamed(context, UpdateProfileScreen.routeName);
-                          },
-                          leading: Icon(Icons.person),
-                          title: Text('Update Profile'),
-                        ) : SizedBox()
+
+                        user != null
+                            ? ListTile(
+                                onTap: () {
+                                  Navigator.popAndPushNamed(
+                                      context, UpdateProfileScreen.routeName);
+                                },
+                                leading: Icon(Icons.person),
+                                title: Text('Update Profile'),
+                              )
+                            : SizedBox()
                       ],
                     );
                   });
             },
           ),
+          ListTile(
+              leading: Icon(Icons.dark_mode_outlined),
+              title: Text('Dark Mode'),
+              trailing: Switch(
+                value: isSwitched,
+                onChanged: (bool value) {
+                  print(isSwitched);
+                  setState(() {
+                    ThemeData.dark(useMaterial3: true);
+                    isSwitched = value;
+                    MyApp.of(context).changeTheme(isSwitched);
+                  });
+                },
+              )),
           AboutListTile(
             icon: Icon(Icons.info_outline),
             applicationLegalese:
                 'A Netflix clone, of sorts\nCreated by: Adeleke Olasope\nadelekeolasope@gmail.com',
             applicationVersion: '1.0.0',
             applicationName: 'Woodie',
-            applicationIcon: Expanded(child: Image.asset('assets/logo.png', height: 100,),),
+            applicationIcon: Expanded(
+              child: Image.asset(
+                'assets/logo.png',
+                height: 100,
+              ),
+            ),
           ),
           user == null
               ? ListTile(
